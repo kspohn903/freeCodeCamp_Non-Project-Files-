@@ -1,0 +1,3 @@
+let strip = (s) => {
+  return s.split('').filter( (x) => 31 < x.charCodeAt(0) && 127 > x.charCodeAt(0) ).join('');
+};
