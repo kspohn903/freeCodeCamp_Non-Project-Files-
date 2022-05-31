@@ -1,0 +1,20 @@
+let Map = function() {
+  this.collection = {};
+  this.has = (key) => this.collection.hasOwnProperty(key);
+  this.add = (key, value) => { 
+       this.collection[key] = value;
+  };
+  /* Note, this can also be used to update a value */
+  this.remove = (key) => {
+    if (this.has(key)) { 
+       delete this.collection[key]; 
+    } 
+  };
+  this.get = (key) => (this.has(key)) ? (this.collection[key]) : (undefined); 
+  /* Note, collection[someMissingKey] is already undefined. */
+  this.values = () => [...Object.values(this.collection)];
+  this.size = () => Object.entries(this.collection).length;
+  this.clear = () => { 
+       this.collection = {}; 
+  }; /*Only change code above this line*/
+};
