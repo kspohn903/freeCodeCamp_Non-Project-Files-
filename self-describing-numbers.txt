@@ -1,0 +1,5 @@
+function isSelfDescribing(n) {
+  let digits = n.toString().split("");
+  return digits.every((targetCount, position) =>
+    targetCount == digits.filter(num => num == position).length);
+}/*(i.) Array of Digits (ii.) Check that every digit is as frequent as the value in that position. (iii.) Check number of matching digits for current position.*/

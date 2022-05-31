@@ -1,0 +1,27 @@
+ let is_prime = (p) => { 
+  if (p == 2) { return true }  
+  /* Lucas−Lehmer test only 
+     works on odd primes. */
+else if(p <= 1 || p % 2 == 0) { return false; } else {
+  for (let i = 3; i <= Math.sqrt(p)+1; i+=2) {
+  if (p % i == 0) { return false; }
+  console.log(`i: ${i}`);
+  } 
+  return true;
+}  };
+let lucasLehmer = (p) => {
+   if (p == 2) { return true; } 
+   else {
+   let m_p = (1 << p)-1; 
+   let s = 4;
+   for (let i=3; i<=p+1 && Math.pow(s,2) >= 2; 
+        i++) {
+       s = (Math.pow(s,2)-2) % m_p;
+       console.log(`s: ${s}`);
+   } 
+   console.log(`s: ${s}`);
+   return s == 0;
+} };
+console.log(`Case 5: ${lucasLehmer(13)}`);
+console.log(`Case 6: ${lucasLehmer(17)}`);
+console.log(`Case 7: ${lucasLehmer(19)}`);

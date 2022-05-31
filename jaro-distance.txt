@@ -1,0 +1,34 @@
+let jaro = (s,t) => {
+        let s_len = s.length, t_len = t.length;
+        if (s_len == 0 && t_len == 0) { return 1; }
+        let match_dist = Math.max(s_len,t_len)/2 - 1;
+        console.log(`match_dist: ${match_dist}`);
+        let s_matches = [], t_matches = [];
+        let matches = 0, transpositions = 0;
+        for (let i = 0; i < s_len; i++) {
+            let start = Math.max(0, i-match_dist), 
+            end = Math.min(i+match_dist+1, t_len);
+            /*console.log(`(start:${start}, end: ${end})\n`);*/
+            for (let j = start; j < end; j++) {
+                if (t_matches[j]) { continue; }
+                if (s.charAt(i) != t.charAt(j)) { continue; }
+                s_matches[i] = true;
+                t_matches[j] = true;
+                matches++;
+                break;
+        } }
+        if (matches == 0) { return 0; }
+        let k = 0;
+        for (let i = 0; i < s_len; i++) {
+            if (!s_matches[i]) { continue; }
+            while (!t_matches[k]) { k++; }
+            if (s.charAt(i) != t.charAt(k)) { transpositions++; }
+            k++;
+        }
+        console.log(`(k:${k},transpositions:${transpositions})`);
+        console.log(`jaro_dist: ${((matches/s_len) + (matches/t_len) + 
+               ((matches - transpositions/2.0)/matches))/3.0}`);
+        return ((matches/s_len) + (matches/t_len) + 
+               ((matches - transpositions/2.0)/matches))/3.0;
+  };
+ 

@@ -1,0 +1,65 @@
+function setConsolidation(sets) {
+  let addAll = (l1,l2) => {
+    l2.forEach( (e) => { if (l1.indexOf(e) == -1) l1.push(e); });
+  }
+  let consolidate = (sets) => {
+     let r = [];
+     for (let i = 0; i < sets.length; i++) {
+       let s = sets[i];
+      {
+        let new_r = [];
+        new_r.push(s);
+        for (let j = 0; j < r.length; j++) {
+         let x = r[j];
+          {
+            if (!( (c1,c2) => {
+                for (let i = 0; i < c1.length; i++) {
+                  if (c2.indexOf(c1[i]) >= 0) return false;
+                }
+                return true; 
+            })(s, x) ) {
+              ( (l1,l2) => { addAll(l1, l2); })(s, x);
+            } else {
+              new_r.push(x);
+        } } }
+        r = new_r;
+    } } return r; };
+
+  function consolidateR(sets) {
+    if (sets.length < 2) { return sets; }
+    let r = [];
+    r.push(sets[0]);
+    {
+      let arr1 = consolidateR(sets.slice(1, sets.length));
+      for (let i = 0; i < arr1.length; i++) {
+        let x = arr1[i];
+        {
+           if ( !( (c1, c2) => {
+              for (let i = 0; i < c1.length; i++) {
+                if (c2.indexOf(c1[i]) >= 0) return false;
+              } return true; })(r[0], x) ) {
+            ( (l1,l2) => l1.push.apply(l1, l2) )(r[0], x);
+          } else {
+            r.push(x);
+          }
+        } } }
+    return r;
+  }
+
+  let hashSetList = (set) => {
+    let r = [];
+    for (let i = 0; i < set.length; i++) {
+      r.push([]);
+      for (let j = 0; j < set[i].length; j++)
+        ( (s,e) => {
+          if (s.indexOf(e) == -1) {
+            s.push(e);
+            return true;
+          } else {
+            return false;
+          } })(r[i], set[i].charAt(j));
+    } return r; };
+
+ let h1 = consolidate(hashSetList(sets)).map( (e) => e.sort() );
+  return h1;
+}

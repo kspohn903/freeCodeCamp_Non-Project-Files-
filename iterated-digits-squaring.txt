@@ -1,0 +1,6 @@
+let iteratedSquare = (n) => {
+  const squaredN = n.toString().split('')
+  .reduce((tot,digit) => tot + parseInt(digit) ** 2, 0);
+  return (squaredN == 1 || squaredN == 89) ? squaredN :
+    iteratedSquare(squaredN);
+}

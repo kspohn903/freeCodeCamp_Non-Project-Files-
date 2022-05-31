@@ -1,0 +1,42 @@
+//returns the entropy of a string as a number 
+let entropy = (s) => { /*create an object containing each 
+individual char and the amount of iterations per char*/
+let prob = (s) => {
+     let h = Object.create(null);
+     s.split('').forEach((c) => { h[c] && h[c]++ || (h[c] = 1); });
+    return h;
+  };
+    s = s.toString(); /*just in case*/ 
+    let e = 0, l = s.length, h = prob(s);
+ 
+    for (let i in h ) {
+        let p = h[i]/l;
+        e -= p*Math.log(p)/Math.log(2);
+    }
+    return e;
+};
+/* creates Fibonacci Word to n as described on Rosetta Code
+see rosettacode.org/wiki/Fibonacci_word */
+let fibWord = (n) => {
+    let w1 = "1", w2 = "0", wNth = [w1,w2], w = "", o = [];
+    for (let i = 0; i < n; i++) {
+        if (i == 0 || i == 1) {
+            w = wNth[i];
+        } else {
+            w = wNth[i-1] + wNth[i-2];
+            wNth.push(w);
+        }
+        let l = w.length,  e = entropy(w);
+        if (l <= 21) {
+        	 o.push({
+            	N: i+1,
+            	Length: l,
+            	Entropy: e,
+            	Word: w });
+        } else {
+        	o.push({
+            	N: i+1,
+            	Length: l,
+            	Entropy: e,
+            	Word: "..." }); 
+  } } return o; };

@@ -1,0 +1,61 @@
+function knapsack(items, maxweight) {
+    let _ = {
+        max: (e) => {
+            let mx = e[0];
+            e.forEach( (f) =>{ if (mx < f) { mx = f; }  });
+            return mx;
+        },
+        map: (arr, func) => arr.map(func),
+        isUndefined: (a) => (a) ? false: true,
+        range: (start,end,step) => {
+            let a = [], f = f = (i, end) => i < end;
+            if (start > end) { f = (i, end) => i > end; }
+            for (let i = start; f(i,end); i += step) { a.push(i); }
+            return a;
+        }
+    };
+    let valuefn = (e) => e.value, weightfn = (e) => e.weight,
+    _epsilon = 0.01;
+    let _p = _.max(_.map(items, valuefn)),
+        _k = _epsilon * _p / items.length;
+    let _memo = ( () => {
+        let _mem = {}, _key = (i, w) => `${i}::${w}`;
+        return {
+            get: (i,w) => _mem[_key(i, w)],
+            put: (i,w,r) => {
+                _mem[_key(i, w)] = r;
+                return r;
+            } }; })();
+    
+    let _m = (i,w) => {
+        i = Math.round(i);
+        w = Math.round(w);
+        if (i < 0 || w == 0) { /*empty base case*/
+            return { items: [], totalWeight: 0, totalValue: 0 };
+        }
+        let mm = _memo.get(i, w);
+        if (!_.isUndefined(mm)) { return mm; }
+        let item = items[i];
+        if (weightfn(item) > w){ /*item does not fit, try the 
+        next item*/
+          return _memo.put(i,w,_m(i-1, w));
+        } /*This item could fit. Are we better off excluding it?*/
+        let excluded = _m(i-1,w), /*or including it?*/
+            included = _m(i-1,w-weightfn(item));
+        if (included.totalValue + Math.floor(valuefn(item)/ _k) 
+        > excluded.totalValue) {
+            /* better off including it. make a copy of the list*/
+            let i1 = included.items.slice();
+            i1.push(item);
+            return _memo.put(i, w, {
+                    items: i1, totalWeight: 
+                    included.totalWeight + weightfn(item),
+                    totalValue: included.totalValue + 
+                    Math.floor(valuefn(item)/_k) });
+        } /*better off excluding it*/
+        return _memo.put(i, w, excluded);
+    };
+    let scaled = _m(items.length-1,maxweight), val = 0;
+    scaled.items.forEach((e) => { val += e.value; });
+    return val;
+}

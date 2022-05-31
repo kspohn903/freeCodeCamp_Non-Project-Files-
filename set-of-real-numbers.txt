@@ -1,0 +1,54 @@
+function realSet(set1, set2, operation, values) {
+  const RangeType = { CLOSED: 0, BOTH_OPEN: 1, 
+  LEFT_OPEN: 2, RIGHT_OPEN: 3 };
+  function Predicate(test) {
+    this.test = test;
+    this.or = (other) => {
+      return new Predicate(t => this.test(t) || other.test(t));
+    };
+    this.and = (other) => {
+      return new Predicate(t => this.test(t) && other.test(t));
+    };
+    this.negate = () => {
+      return new Predicate(t => !this.test(t));
+    };
+  }
+  function RealSet(start, end, rangeType, predF) {
+    this.low = start;
+    this.high = end;
+    if (predF) {
+      this.predicate = new Predicate(predF);
+    } else {
+      this.predicate = new Predicate(d => {
+        return (rangeType == RangeType.CLOSED) ? (start <= d && 
+        d <= end): (rangeType == RangeType.BOTH_OPEN) ? (
+        start < d && d < end):(rangeType == RangeType.LEFT_OPEN) ?
+        (start < d && d <= end): (start <= d && d < end);   
+      });
+    }
+    this.contains = (d) => this.predicate.test(d);
+    this.union = (other) => {
+      let low2 = Math.min(this.low, other.low),
+          high2 = Math.max(this.high, other.high);
+      return new RealSet(low2, high2, null, d =>
+        this.predicate.or(other.predicate).test(d) );
+    };
+    this.intersect = (other) => {
+      let low2 = Math.min(this.low, other.low),
+          high2 = Math.max(this.high, other.high);
+      return new RealSet(low2, high2, null, d =>
+        this.predicate.and(other.predicate).test(d) );
+    };
+    this.subtract = (other) => {
+      return new RealSet(this.low, this.high, null, d =>
+        this.predicate.and(other.predicate.negate()).test(d) );
+    };
+  }
+  set1 = new RealSet(set1.low, set1.high, set1.rangeType);
+  set2 = new RealSet(set2.low, set2.high, set2.rangeType);
+  let result = [];
+  values.forEach( (value) => {
+    result.push(set1[operation](set2).contains(value));
+  });
+  return result;
+}

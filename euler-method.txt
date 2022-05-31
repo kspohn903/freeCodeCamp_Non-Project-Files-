@@ -1,0 +1,14 @@
+let eulersMethod = (x1,y1,x2,h) => {
+  const cooling = (_, y) => (-1)*(0.07)* (y-20);
+  let x = x1, y = y1;
+  while ((x < x2 && x1 < x2) || (x > x2 && x1 > x2)) {
+    /* Calculate the next values */
+    y += h * cooling(x, y);
+    x += h;
+  }
+  return y;
+};
+
+console.log(`Case 1: ${eulersMethod(0, 100, 100, 2)}`);
+console.log(`Case 2: ${eulersMethod(0,100,100,5)}`);
+console.log(`Case 3: ${eulersMethod(0,100,100,10)}`);

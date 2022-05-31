@@ -1,0 +1,27 @@
+let straddle = (message, alphabet) => {
+  let prefixes = new Array("", alphabet[0].indexOf(" "), 
+      alphabet[0].lastIndexOf(" ")), out = "";
+  message = message.toUpperCase();
+  message = message.replace(/([0-9])/g,"/$1");
+  /*dumb way to escape numbers.*/
+  for (let i = 0; i < message.length; i++) {
+    let chr = message[i];
+    if (chr == " ") { continue; }
+    for (let j = 0; j < 3; j++) {
+      let k = alphabet[j].indexOf(chr);
+      if (k < 0) { continue; }
+      out += prefixes[j].toString() + k;
+    }
+    if (chr == "/") { out += message[++i]; }
+  } return out; };
+let unstraddle = (message, alphabet) => {
+  let out = "", n, o, prefixes = new Array("",
+   alphabet[0].indexOf(" "), alphabet[0].lastIndexOf(" "));
+  for (let i = 0; i < message.length; i++) {
+    n = message[i]*1;
+    o = (n == prefixes[1]) ? (alphabet[1][message[++i]]): 
+   (n == prefixes[2]) ? (alphabet[2][message[++i]]):(alphabet[0][n]);
+   (o == "/") ? (out += message[++i]) : (out += o);
+  }
+  return out;
+};
