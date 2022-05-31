@@ -1,0 +1,21 @@
+function digitnPowers(n) { /* Pre-compute powers */
+  const POWERS = Array(10).fill(0).map((_, idx) => idx ** n);
+/*Checks if the digits in 'num' raised to n for sums equal to 'num'*/
+  let isPowerSum = (n) => {
+    let sum = 0;
+    let staysUnder = n.toString().split("")
+      .every(digit => {
+        sum += POWERS[digit];
+        return (sum <= n);
+      });
+    return staysUnder && (sum == n);
+  }; /*End of isPowerSum; Helper 1.*/
+  /* Bounds of integers we need to check */
+  const minVal = 2 ** n, maxVal = 9 ** (n+1);
+  /*Check integers in range*/
+  let sum = 0;
+  for (let i = minVal; i < maxVal; i++) {
+    if (isPowerSum(i)) { sum += i; }
+  }
+  return sum;
+}

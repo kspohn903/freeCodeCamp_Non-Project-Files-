@@ -1,0 +1,34 @@
+const PRIMES = [false, false, true];
+function circularPrimes(n) { /* Prime checker */
+  let checkPrime = (n) => {
+    if (PRIMES[n] != undefined) { return PRIMES[n]; }
+    if (n % 2 == 0) { return false; }
+    const bound = parseInt(Math.sqrt(n));
+    for (let i = 3; i <= bound; i += 2) {
+      if (n % i == 0) { return PRIMES[n] = false; }
+    }
+    return (PRIMES[n] = true);
+  }; /*end of checkPrime (Helper 1). */ 
+  let isCirclePrime = (n) => { /* Circular prime checker */
+    if (n.toString().split("").some(digit => digit % 2 == 0)) {
+      return false; 
+    }
+    let currentRotation = n;
+    for (let i = 0; i < n.toString().length; i++) {
+      if (!checkPrime(currentRotation)) { return false; }
+      currentRotation = spin(currentRotation);
+    }
+    return true;
+  }; /*end of isCirclePrime (Helper 2).*/ 
+  let spin = (n) => { /* Rotate number */
+    const digits = n.toString().split('');
+    digits.push(digits.shift());
+    return parseInt(digits.join(""));
+  };/*end of spin (Helper 3)*/ 
+  let numCircular = 1; /* Count no. circular primes (sieve-like).*/
+  for (let i = 3; i < n; i += 2) {
+    if (isCirclePrime(i)) { numCircular++; }
+  }
+  return numCircular;
+}
+circularPrimes(1000000);

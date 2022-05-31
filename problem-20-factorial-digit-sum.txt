@@ -1,0 +1,26 @@
+    
+let sumFactorialDigits = (n) => {
+    let v = [];
+    let multiply = (x) => {
+        let carry = 0, size = v.length;
+        for (let i = 0 ; i < size ; i++) {
+            let res = carry + v[i]*x;
+            v[i] = res % 10;
+            carry = Math.floor(res/10);
+        }
+        while (carry != 0) {
+              v.push(carry % 10);
+              carry = Math.floor(carry/10);
+        }
+    }; 
+    v.push(1); 
+    for (let i=1; i<=n; i++) { multiply(i); }
+    let sum = 0, size = v.length;
+    for (let i = 0 ; i < size ; i++) { sum += v[i]; }
+    return sum;
+};     
+console.log(`Case 1 (n = 10): ${sumFactorialDigits(10)}`);
+console.log(`Case 2 (n = 25): ${sumFactorialDigits(25)}`);
+console.log(`Case 3 (n = 50): ${sumFactorialDigits(50)}`);  
+console.log(`Case 4 (n = 75): ${sumFactorialDigits(75)}`); 
+console.log(`Case 5 (n = 100): ${sumFactorialDigits(100)}`);  

@@ -1,0 +1,39 @@
+/* Prime factorization of both numbers can only have digits < 10 */
+function simplifyFrac(denom, num) {
+  let sDenom = denom, sNum = num;
+  for (let i = 2; i < 10; i++) {
+    if (sDenom % i == 0 && sNum % i == 0) {
+      sDenom /= i;
+      sNum /= i;
+      i = 2;
+    }
+  }
+  return [sDenom, sNum];
+}
+/* Cancels out the shared digit, or returns false if there is no shared digit */
+function cancelPair(denom, n) {
+  const dDigits = [Math.floor(denom/10), denom % 10];
+  const nDigits = [Math.floor(n/10), n % 10];
+  /* If there is a 0, we can't cancel a digit */
+  return (dDigits.indexOf(0) > -1) ? (false): 
+         (dDigits[0] == nDigits[0]) ? ([dDigits[1], nDigits[1]]):
+         (dDigits[0] === nDigits[1]) ? ([dDigits[1], nDigits[0]]):
+         (dDigits[1] === nDigits[0]) ? ([dDigits[0], nDigits[1]]):
+         (dDigits[1] === nDigits[1]) ? ([dDigits[0], nDigits[0]]):
+         false;
+}
+function digitCancellingFractions() {
+  let finalN = 1, finalD = 1;
+  for (let denom = 11; denom < 100; denom++) {
+    for (let n = 11; n < denom; n++) {
+      const test = cancelPair(denom,n);
+      if (!test) { continue; }
+      if (n/denom === test[1] / test[0]) {
+        finalN *= test[1];
+        finalD *= test[0];
+      }
+    }
+  }
+  return simplifyFrac(finalD, finalN)[0];
+}
+digitCancellingFractions();

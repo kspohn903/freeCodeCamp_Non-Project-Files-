@@ -1,0 +1,87 @@
+function anagramicSquares(words) {
+  // Based on https://www.mathblog.dk/project-euler-98-anagrams-square-nums/
+  let findmaxSquare = (squares,w1,w2) => {
+    let maxSquare = 0;
+    for (let i = 0; i < squares.length; i++) {
+      const len = squares[i].toString().length;
+      if (len < w1.length) { continue; }
+      if (len > w1.length) { break; }
+      const w1Square = squares[i];
+      const letter2Digit = mapLettersToDigits(w1, w1Square);
+      const noProperMapping = Object.keys(letter2Digit).length == 0;
+      if (noProperMapping) { continue; }
+      const w2Square = getnumFromMapping(w2,letter2Digit);
+      if (w2Square == 0) { continue; }
+      const doesw2SquareExist = squares.indexOf(w2Square) != -1;
+      if (doesw2SquareExist) {
+        const pairMaximum = Math.max(w1Square, w2Square);
+        maxSquare = Math.max(maxSquare, pairMaximum);
+    } } return maxSquare; };
+
+  let getnumFromMapping = (word,letter2Digit) => {
+    const leadingZero = letter2Digit[word[0]] == 0;
+    if (leadingZero) { return 0; }
+    let num = 0;
+    for (let i = 0; i < word.length; i++) {
+      num = num * 10 + letter2Digit[word[i]];
+    }
+    return num;
+  };
+  let mapLettersToDigits = (word,square) => {
+    const letter2Digit = {};
+    for (let j = word.length - 1; j >= 0; j--) {
+      const curDigit = square%10;
+      square = Math.floor(square/10);
+      const curLetter = word[j];
+      const isLetterRepeated = letter2Digit.hasOwnProperty(curLetter);
+      if (isLetterRepeated) {
+        const isLetterUsedForTheSameDigit =
+          letter2Digit[curLetter] == curDigit;
+        if (isLetterUsedForTheSameDigit) { continue; }
+        return {};
+      }
+      const isDigitUsed = 
+            Object.values(letter2Digit).indexOf(curDigit) != -1;
+      if (isDigitUsed) { return {}; }
+      letter2Digit[curLetter] = curDigit;
+    }
+    return letter2Digit;
+  };
+  let groupWordsWithSameLetters = (words) => {
+    const letters2Words = {};
+    for (let i = 0; i < words.length; i++) {
+      const word = words[i];
+      const sortedLetters = word.split('').sort().join('');
+      if (!letters2Words.hasOwnProperty(sortedLetters)) {
+        letters2Words[sortedLetters] = [];
+      } letters2Words[sortedLetters].push(word); }
+    return letters2Words;
+  };
+
+ const letters2Words = groupWordsWithSameLetters(words);
+ const anagrams = Object.keys(letters2Words).filter(
+  letters => letters2Words[letters].length > 1);
+  const lenOfLongestAnagram = anagrams.map(anagram => anagram.length)
+                                      .sort((a, b) => b - a)[0];
+  const squares = [];
+  const numLim = (10 ** lenOfLongestAnagram) ** 0.5;
+  for (let num = 2; num < numLim; num++) {
+    const square = num ** 2;
+    squares.push(square);
+  }
+  let largestSquare = 0;
+  for (let i = 0; i < anagrams.length; i++) {
+    const curWords = letters2Words[anagrams[i]];
+    for (let j = 0; j < curWords.length; j++) {
+      for (let k = j+1; k < curWords.length; k++) {
+        const squareValue = findmaxSquare(squares,curWords[j],
+        curWords[k]);
+       if (squareValue > largestSquare) { largestSquare = squareValue; }
+      } } }
+  return largestSquare;
+}
+/*Only change code above this line*/
+const testWords1 = [
+"DAMAGE","DANGER","DANGEROUS","DARK","DATA","DATE","DAUGHTER","DAY","DEAD","DEAL","DEATH","DEBATE","DEBT","DECADE","DECIDE","DECISION","DECLARE","DEEP","DEFENCE","DEFENDANT","DEFINE","DEFINITION","DEGREE","DELIVER","DEMAND","DEMOCRATIC","DEMONSTRATE","DENY","DEPARTMENT","DEPEND","DEPUTY","DERIVE","DESCRIBE","DESCRIPTION","DESIGN","DESIRE","DESK","DESPITE","DESTROY","DETAIL","DETAILED","DETERMINE","DEVELOP","DEVELOPMENT","DEVICE","DIE","DIFFERENCE","DIFFERENT","DIFFICULT","DIFFICULTY","DINNER","DIRECT","DIRECTION","DIRECTLY","DIRECTOR","DISAPPEAR","DISCIPLINE","DISCOVER","DISCUSS","DISCUSSION","DISEASE","DISPLAY","DISTANCE","DISTINCTION","DISTRIBUTION","DISTRICT","DIVIDE","DIVISION","DO","DOCTOR","DOCUMENT","DOG","DOMESTIC","DOOR","DOUBLE","DOUBT","DOWN","DRAW","DRAWING","DREAM","DRESS","DRINK","DRIVE","DRIVER","DROP","DRUG","DRY","DUE","DURING","DUTY","LABOUR","LACK","LADY","LAND","LANGUAGE","LARGE","LARGELY","LAST","LATE","LATER","LATTER","LAUGH","LAUNCH","LAW","LAWYER","LAY","LEAD","LEADER","LEADERSHIP","LEADING","LEAF","LEAGUE","LEAN","LEARN","LEAST","LEAVE","LEFT","LEG","LEGAL","LEGISLATION","LENGTH","LESS","LET","LETTER","LEVEL","LIABILITY","LIBERAL","LIBRARY","LIE","LIFE","LIFT","LIGHT","LIKE","LIKELY","LIMIT","LIMITED","LINE","LINK","LIP","LIST","LISTEN","LITERATURE","LITTLE","LIVE","LIVING","LOAN","LOCAL","LOCATION","LONG","LOOK","LORD","LOSE","LOSS","LOT","LOVE","LOVELY","LOW","LUNCH"];
+
+anagramicSquares(testWords1);

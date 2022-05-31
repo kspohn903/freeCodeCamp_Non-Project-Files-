@@ -1,0 +1,17 @@
+let gcd = (a,b) => (b) ? gcd(b, a%b): a;
+
+function RSAEncryption(p,q) {
+  let phi = (p-1)*(q-1);
+  let best = Number.MAX_SAFE_INTEGER, sum = 0;
+  for (let e = 0; e < phi; ++e) {
+    if (!(gcd(e,phi) == 1)) { continue; }
+    let msg = (gcd(p-1, e-1) + 1)*(gcd(q-1, e-1) + 1);
+    if (best == msg) {
+      sum += e;
+    } else if (best > msg) {
+      best = msg;
+      sum = e;
+    }
+  }
+  return sum;
+}

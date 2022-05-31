@@ -1,0 +1,32 @@
+function totientPermutation(limit) {
+  let getSievePrimes = (max) => {
+    const primes = [];
+    const pMap = new Array(max).fill(true);
+    pMap[0] = false;
+    pMap[1] = false;
+    for (let i = 2; i < max; i += 2) {
+      if (pMap[i]) {
+        primes.push(i);
+        for (let j = i * i; j < max; j += i) { pMap[j] = false; }
+      } if (i === 2) { i = 1; } } return primes; };
+
+  let sortDigits = (n) => n.toString().split('').sort().join('');
+  let isPermutation = (nA, nB) => sortDigits(nA) == sortDigits(nB);
+  
+  const MAX_PRIME = 4000;
+  const primes = getSievePrimes(MAX_PRIME);
+
+  let nValue = 1, minRatio = Infinity;
+  for (let i = 1; i < primes.length; i++) {
+    for (let j = i+1; j < primes.length; j++) {
+      const num = primes[i] * primes[j];
+      if (num > limit) { break; }
+      const phi = (primes[i]-1)*(primes[j]-1);
+      const ratio = num/phi;
+      if (minRatio > ratio && isPermutation(num, phi)) {
+        nValue = num;
+        minRatio = ratio;
+    } } }
+   return nValue;
+}
+totientPermutation(10000);

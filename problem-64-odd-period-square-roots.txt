@@ -1,0 +1,26 @@
+function oddPeriodSqrts(n) {
+  let getPeriod = (n) => {
+    let period = 0, m = 0, d = 1;
+    let a = Math.floor(Math.sqrt(n));
+    const a0 = a;
+    while (2*a0 != a) {
+      m = (d*a) - m;
+      d = Math.floor((n - m ** 2)/d);
+      a = Math.floor((Math.sqrt(n) + m)/d);
+      period++;
+    }
+    return period;
+  };
+  let isPerfectSquare = (n) => Number.isInteger(Math.sqrt(n));
+  let counter = 0;
+  for (let i = 2; i <= n; i++) {
+    if (!isPerfectSquare(i)) {
+      if (getPeriod(i) % 2 != 0) { counter++; }
+    }
+  }
+  return counter;
+}
+let testArr = [13,500,1000,5000]; 
+ for (let i =0; i< testArr.length; i++) {
+   console.log(`Case ${i+1}: ${oddPeriodSqrts(testArr[i])}`);
+ }

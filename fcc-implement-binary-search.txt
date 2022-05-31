@@ -1,0 +1,22 @@
+const testArray = [0, 1, 2, 3, 4, 5, 8, 9, 10, 11, 12, 13, 14, 15, 16, 
+                   17, 18, 19, 20, 21, 22, 23, 49, 70];
+let binarySearch = (arr, el, l = 0, r = arr.length-1, path=[]) => {
+  let mid = Math.floor((l + r)/2);
+  path.push(arr[mid]);
+  if(arr[mid] == el) { 
+     return path; 
+  }
+  if(l >= r) { 
+     return "Value Not Found"; 
+  }
+  if(arr[mid] > el) { 
+     return binarySearch(arr,el,l,mid-1,path); 
+  }
+  return binarySearch(arr,el,mid+1,r,path);
+};
+
+let test = [0,1,2,6,11,13];
+for(let i = 0; i < test.length; i++) {
+  let el = test[i];
+  console.log(`Case ${i+1}: (el: ${el}, binPath: [${binarySearch(testArray, el)}])`);
+}

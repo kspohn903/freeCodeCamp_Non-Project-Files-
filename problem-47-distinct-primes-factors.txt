@@ -1,0 +1,21 @@
+/* Initalize factor count with sieve */
+const NUMFACTORS = Array(150000).fill(0);
+(function initFactors(num) {
+  for (let i = 2; i < num; i++) {
+    if (NUMFACTORS[i] === 0) {
+      for (let j = i; j < num; j += i) { NUMFACTORS[j]++; } 
+    } }
+    //console.log(`NumFacts: ${NUMFACTORS}\n`);
+})(150000);
+
+function distinctPrimeFactors(targetNoPrimes, targetConsec) {
+  let noConsec = 0, currNo = 10;
+  while (noConsec < targetConsec) {
+    noConsec = (NUMFACTORS[currNo] == targetNoPrimes) ? 
+               (noConsec+1):(0);
+    currNo++;
+  }
+  console.log(`Diff: ${currNo- targetConsec}\n`);
+  return (currNo - targetConsec);
+}
+distinctPrimeFactors(4, 4);

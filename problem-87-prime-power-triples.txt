@@ -1,0 +1,33 @@
+function primePowerTriples(n) {
+  let getSievePrimes = (max) => {
+    const primes = [], pMap = new Array(max).fill(true);
+    pMap[0] = false;
+    pMap[1] = false;
+    for (let i = 2; i <= max; i += 2) {
+      if (pMap[i]) {
+        primes.push(i);
+        for (let j = i * i; j <= max; j += i) { pMap[j] = false; }
+      }
+      if (i == 2) { i = 1; }
+    } return primes; };
+
+  let getPowersSummed = (nums,pows,lim,curSum) => {
+    if (curSum >= lim || pows.length == 0) {
+      return (curSum >= lim) ? []: [curSum];
+    }
+    const powsSummed = [], curPow = pows[0], powsLeft = pows.slice(1);
+    for (let i = 0; i < nums.length; i++) {
+      const curNum = nums[i];
+      const nextSum = curSum + curNum ** curPow;
+      if (nextSum >= lim) { return powsSummed; }
+      const result = getPowersSummed(nums, powsLeft, lim, 
+      curSum + curNum ** curPow);
+      powsSummed.push(...result);
+    }
+    return powsSummed;
+  };
+  const maximumBaseNumber = Math.floor(Math.sqrt(n-2 ** 3 - 2 ** 4)) + 1, primes = getSievePrimes(maximumBaseNumber), 
+   uniqueSums = new Set(getPowersSummed(primes, [2,3,4], n, 0));
+  return uniqueSums.size;
+}
+primePowerTriples(50);

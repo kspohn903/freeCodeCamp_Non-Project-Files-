@@ -1,0 +1,52 @@
+function monopolyOdds(n) {
+  let chanceCard = (pos,chanceCardPos) => {
+    chanceCardPos = (chanceCardPos + 1) % 16;
+    if (chanceCardPos < 6) {
+      pos = chanceCardsMoves[chanceCardPos];
+    } else if (chanceCardPos == 6 || chanceCardPos == 7) {
+      pos = nextMovesFromR[pos];
+    } else if (chanceCardPos == 8) {
+      pos = nextMovesFromU[pos];
+    } else if (chanceCardPos == 9) { pos -= 3; }
+    return [pos,chanceCardPos];
+  };
+  let chestCard = (pos,chestPos) => {
+    chestPos = (chestPos+1) % 16;
+    if (chestPos < 2) { pos = chestCardsMoves[chestPos]; }
+    return [pos,chestPos];
+  };
+  let isChest = (pos) => pos == 2 || pos == 17 || pos == 33;
+  let isChance = (pos) => pos == 7 || pos == 22 || pos == 36;
+  let isJail = (pos) => pos == 30;
+  let roll = (dice) => Math.floor(Math.random() * dice) + 1;
+  let getTopThree = (board) => sortByVisits(board).slice(0,3).map(el => el[0].toString().padStart(2,'0')).join('');
+  let sortByVisits = (board) => board.map(
+    (el,idx) => [idx,el]).sort((a,b) => a[1]-b[1]).reverse();
+
+  const rounds = 2000000;
+  const chestCardsMoves = [0, 10], 
+        chanceCardsMoves = [0, 10, 11, 24, 39, 5];
+  const nextMovesFromR = { 7: 15, 22: 25, 36: 5 }, 
+        nextMovesFromU = { 7: 12, 36: 12, 22: 28 };
+  const board = new Array(40).fill(0);
+  let dblCount = 0, curPos = 0, curChestCard = 0,
+      curChanceCard = 0;
+  for (let i = 0; i < rounds; i++) {
+    const d1 = roll(n),  d2 = roll(n);
+    if (d1 == d2) { dblCount++; } 
+    else { dblCount = 0; }
+    if (dblCount > 2) {
+      curPos = 10;
+      dblCount = 0;
+    } else {
+      curPos = (curPos+d1+d2) % 40;
+      if (isChance(curPos)) {
+        [curPos, curChanceCard] = chanceCard(curPos,curChanceCard);
+      } else if (isChest(curPos)) {
+        [curPos, curChestCard] = chestCard(curPos, curChestCard);
+      } else if (isJail(curPos)) {
+        curPos = 10;
+      } } board[curPos]++; }
+  return getTopThree(board);
+}
+monopolyOdds(8);

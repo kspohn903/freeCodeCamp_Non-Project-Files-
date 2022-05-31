@@ -1,0 +1,18 @@
+let romanNumerals = (roman) => {
+  const numerals = [...roman], 
+        replaces = [['VIIII','IX'],['IIII','IV'],['LXXXX','XC'],
+                    ['XXXX','XL'],['DCCCC','CM'],['CCCC','CD']];
+  let savedChars = 0;
+  for (let i = 0; i < numerals.length; i++) {
+    const charsBefore = numerals[i].length;
+    for (let j = 0; j < replaces.length; j++) {
+      numerals[i] = numerals[i].replace(...replaces[j]);
+    }
+    const charsAfter = numerals[i].length;
+    savedChars += (charsBefore-charsAfter);
+  }
+  return savedChars;
+}; /*Only change code above this line*/
+const testNumerals1 = ['XIIIIII','XVI','MMMCCLXVIIII','XXXXVI', 'MMMMXX','CCLI','CCCCXX','MMMMDCXXXXI','DCCCCIIII','MXVIIII'];
+
+romanNumerals(testNumerals1);

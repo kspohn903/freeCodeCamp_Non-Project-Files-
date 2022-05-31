@@ -1,0 +1,65 @@
+/* Initalize prime number list with sieve */
+const PRIMES = Array(50000).fill(false);
+(function initPrimes(n) {
+  const upper = Math.floor((n-1)/2);
+  const isPrime = Array(upper).fill(true);
+  const sqrtUpper = Math.floor((Math.sqrt(n)-1)/2);
+  for (let i = 0; i <= sqrtUpper; i++) {
+    if (isPrime[i]) { /* Mark value in PRIMES array */
+      const prime = 2*i + 3;
+      PRIMES[prime] = true;
+      /*Mark all multiples of this number as false (not prime)*/
+      const primeSqaredIndex = 2 * i ** 2 + 6 * i + 3;
+      for (let j = primeSqaredIndex; j < upper; j += prime) { 
+        isPrime[j] = false; 
+      }
+    }
+  }
+  for (let i = sqrtUpper + 1; i < upper; i++) {
+    if (isPrime[i]) { PRIMES[2*i + 3] = true; }
+  }
+})(50000);
+
+/* Check if num is prime */
+function isPrime(num) { /* Check known primes */
+  if (num < 2) { return false; }
+  if (PRIMES[num] != undefined) { return PRIMES[num]; }
+  /* Compute if num is prime */
+  const sqrt = parseInt(Math.sqrt(num));
+  for (let i = 2; i <= sqrt; i++) {
+    if (num % i == 0) { return PRIMES[num] = false; }
+  }
+  return PRIMES[num] = true;
+}
+function countPrimes(a, b) { 
+  /*Counts the consecutive primes for a and b */
+  let output = b, n = 0, count = 0;
+  while (isPrime(output)) {
+    count++;
+    n++;
+    output = n ** 2 + (a*n) + b;
+  }
+  return count;
+}
+/* Find best run of primes in quadratic range */
+function quadraticPrimes(range) {
+  let winningProduct = 0, winningCount = 0;
+  for (let b = 2; b <= range; b++) {
+    /* We only need to check a/b when b is prime */
+    if (!isPrime(b)) { continue; }
+    for (let a = 1-range; a < range; a++) {
+      /* a must have opposite parity of b*/
+      if ((b === 2 && a % 2 === 1) || (a % 2 === 0)) { 
+        continue; 
+      } /* Check count of primes from formula */
+      let currentCount = countPrimes(a,b);
+      if (currentCount > winningCount) {
+        winningProduct = a * b;
+        winningCount = currentCount;
+      }
+    }
+  }
+  return winningProduct;
+}
+console.log(`Cases [1,2,3,4]: n=[200,500,800,1000]`);
+console.log(`Case 1: ${quadraticPrimes(200)}\nCase 2: ${quadraticPrimes(500)}\nCase 3: ${quadraticPrimes(800)}\nCase 4: ${quadraticPrimes(1000)}`);

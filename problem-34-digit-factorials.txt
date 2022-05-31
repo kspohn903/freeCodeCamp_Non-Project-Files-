@@ -1,0 +1,19 @@
+const FACTORIALS = [1,1,2,6,24,120,720,5040,40320,362880];
+function digitFactorial() {
+  let result = {'sum': 0,'numbers': [] };
+  /* 10^(d-1) <= n < 10^d => d <= 7.33 < d + 1
+     ... max = 7 * 9! = 2,540,160, hence 7 digit max. limit.
+     First Digit cannot exceed 2.[xyz]E[^_alpha]
+     max = 2! + 6 * 9! = 2,177,282 ... */
+  let max = 2177282;
+  for (let i = 10; i <= max; i++) {
+    let factorialSum = i.toString().split("")
+        .reduce((sum, digit) => sum + FACTORIALS[digit], 0);
+    if (factorialSum == i) {
+      result.sum += i;
+      result.numbers.push(i);
+    }
+  }
+  return result;
+}
+console.log(`digitFact: ${JSON.stringify(digitFactorial())}`);

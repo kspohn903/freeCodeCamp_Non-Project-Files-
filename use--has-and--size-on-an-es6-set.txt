@@ -1,0 +1,7 @@
+function checkSet(arr,checkValue){
+let arrSet = new Set(arr);
+let hasEl = arrSet.has(checkValue);
+let len = arrSet.size;
+return [hasEl, len];
+}
+console.log(checkSet([4,5,6], 3))

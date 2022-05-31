@@ -1,0 +1,16 @@
+let swap = (a,b,arr) => { 
+    [arr[a], arr[b]] = [arr[b], arr[a]]; 
+}
+
+let bubbleSort = (arr) => {
+  for (let i = 0; i < arr.length; i++) {
+    for (let j = 0; j < arr.length-1-i; j++) {
+       /*-i because the largest element will be bubbled at 
+          the end so we don't have to compare.*/
+       if (arr[j] > arr[j+1]) { 
+           swap(j,j+1,arr); 
+       }
+    } 
+  } 
+  return arr; 
+};
