@@ -1,0 +1,26 @@
+/* Swapping array elements via ES6 array destructuring */
+let swap = (arr,x,y) => { 
+    [arr[x], arr[y]] = [arr[y], arr[x]]; 
+};
+
+let pivot = (arr, l = 0, r = arr.length-1) => {
+  let shift = l;
+  for (let i = l+1; i <= r; i++) {
+    /*Move all the small elements on the left side*/
+    if (arr[i] < arr[l]) { 
+       swap(arr,i,++shift); 
+    }
+  } /*Finally swapping the last element with the left*/
+  swap(arr,l,shift);
+  return shift;
+}; /*Pivot function returns the fixed pivot point*/
+
+let quickSort = (arr, l = 0, r = arr.length - 1) => {
+  if (l < r) {
+    let pivotIdx = pivot(arr,l,r); /* Recursively calling the 
+    function to the left of the pivot and to the right of the pivot. */
+    quickSort(arr,l,pivotIdx-1);
+    quickSort(arr,pivotIdx+1,r);
+  } 
+  return arr;
+};

@@ -1,0 +1,31 @@
+let binarySearch = (searchList, val) => {
+  let arrayPath = []; 
+  /* set initial (l,mid,r) indices.*/
+  let l = 0, r = searchList.length - 1;
+  let mid = Math.floor(r/2);
+  /* If first comparison finds value, push it to 
+     arrPath and return arrPath.*/
+  if (searchList[mid] == val) {
+    arrayPath.push(searchList[mid]);
+    return arrayPath;
+  }
+  while (searchList[mid] != val) {
+    arrayPath.push(searchList[mid]); /* add to output array */
+    if (r < l) { /* Case 1: DNE / element not found. */
+       return 'Value Not Found';
+    /* Case 2: val is in l/r portion of searchList. 
+       Then, update (l,mid,r). */
+    } else if (searchList[mid] > val) {
+      r = mid - 1;
+    } else {
+      l = mid + 1;
+    }
+    mid = l + Math.floor((r-l)/2);
+    /* If found, then update output array and exit */
+    if (searchList[mid] == val) {
+      arrayPath.push(searchList[mid]);
+      break;
+    }
+  }
+  return arrayPath;
+};

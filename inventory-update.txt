@@ -1,0 +1,41 @@
+function updateInventory(arr1, arr2) {
+  let index, arrCurrInvName = [], arrNewInvName = []; 
+  /*All inventory must be accounted for or you're fired!*/
+
+  /*(i.) Names of arr1's items, (ii.) Names of arr2's items*/
+  /* Same as using two for loops, this takes care of increasing 
+     the number of stock quantity.*/
+  arr1.forEach((item1) => {
+    arr2.forEach((item2) => {
+      if (item1[1] == item2[1]) {
+        item1[0] = item1[0] + item2[0]; /*Update stock quantities.*/
+      } 
+    }); 
+  });
+
+  /*Get item's name for new Inventory*/
+  arr2.forEach((item) => { arrNewInvName.push(item[1]); });
+
+  /*Get item's name for Current Inventory*/
+  arr1.forEach( (item) => { 
+    arrCurrInvName.push(item[1]); 
+  });
+
+  /*Add new inventory items to current inventory.*/
+  arrNewInvName.forEach((item) => {
+    if (arrCurrInvName.indexOf(item) == -1) {
+      index = arrNewInvName.indexOf(item);
+      arr1.push(arr2[index]);
+    } 
+  }); /* Sort the array alphabetically using the second 
+         element of the array as base.*/
+  arr1.sort((currItem, nextItem) => ( (currItem[1] > nextItem[1]) ? 1 : -1) ); 
+  /* Ternary Operator in a1.sort((...args) => { ... }) to avoid using if else */
+  return arr1;
+}
+/*(a.) test here (b.) Example inventory lists.*/
+let currInv = [[21,"Bowling Ball"],[2,"Dirty Sock"],[1,"Hair Pin"],
+              [5,"Microphone"]],
+    newInv = [[2,"Hair Pin"],[3,"Half-Eaten Apple"],
+              [67,"Bowling Ball"],[7,"Toothpaste"]];
+updateInventory(currInv, newInv);

@@ -1,0 +1,31 @@
+/*Merger function, which merges arr2_Sorted into arr1_Sorted.*/
+let merger = (arr1,arr2) => {
+  let i = 0, j = 0, mergedArr = [];
+  while (i < arr1.length && j < arr2.length) {
+    if (arr1[i] > arr2[j]) { 
+       mergedArr.push(arr2[j++]); 
+    } else { 
+       mergedArr.push(arr1[i++]); 
+    }
+  }
+  while (i < arr1.length) { 
+    mergedArr.push(arr1[i++]); 
+  }
+  while (j < arr2.length) { 
+    mergedArr.push(arr2[j++]); 
+  }
+  return mergedArr;
+};
+
+let mergeSort = (arr) => {
+  /*Array of length 1 is sorted so we return the same array back*/
+  if (arr.length == 1) { 
+    return arr; 
+  }
+  /*Break down the array to half from middle into left and right*/
+  let mid = Math.floor(arr.length/2),
+      l = mergeSort(arr.slice(0, mid)),
+      r = mergeSort(arr.slice(mid)); 
+      /* Return the merged sorted array */
+  return merger(l,r);
+};

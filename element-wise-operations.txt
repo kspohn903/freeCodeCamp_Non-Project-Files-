@@ -1,0 +1,80 @@
+function operation(op, arr1, arr2) {
+let finalArr = [];
+console.log(`Case: ${op}`);
+if (op=="m_add") { /*mat_add...*/ 
+  for(let i=0; i < arr1.length; i++) {
+    let combinedRow = [];
+    for(let j=0; j < arr1[i].length; j++) {
+     let col = arr1[i][j] + arr2[i][j];
+     console.log(`col @ [i=${i+1}, j=${j+1}] = ${col}`);
+     combinedRow.push(col); 
+    }
+    console.log(`combinedRow: ${combinedRow}`);
+    finalArr.push(combinedRow); 
+   } 
+ } else if(op == "m_sub") { /*mat_sub...*/ 
+    for(let i=0; i < arr1.length; i++) {
+     let combinedRow = [];
+     for(let j=0; j < arr1[i].length; j++) {
+        let col = arr1[i][j] - arr2[i][j];
+        console.log(`col, @ (i=${i+1}, j=${j+1}): ${col}`);
+        combinedRow.push(col); 
+     }
+     console.log(`combinedRow: ${combinedRow}`);
+     finalArr.push(combinedRow); 
+    } 
+ } else if(op == "s_add") { /*scalar add, matrix 2 = const.*/ 
+   for(let i=0; i < arr1.length; i++) {
+    let combinedRow = [];
+    for(let j=0; j < arr1[i].length; j++) {
+     let col = arr1[i][j] + arr2;
+     console.log(`col, @ (i=${i+1}, j=${j+1}): ${col}`);
+     combinedRow.push(col); 
+    }
+    console.log(`combinedRow: ${combinedRow}`);
+    finalArr.push(combinedRow); 
+    } 
+  } else if (op == "m_mult") {
+    for(let i=0; i < arr1.length; i++) {
+    let combinedRow = [];
+    for(let j=0; j < arr1[i].length; j++) {
+     let col = arr1[i][j]*arr2[i][j];
+     console.log(`col, @ (i=${i+1}, j=${j+1}): ${col}`);
+     combinedRow.push(col); 
+    }
+    console.log(`combinedRow: ${combinedRow}`);
+    finalArr.push(combinedRow); 
+   } 
+  } else if (op == "m_div") {
+    for(let i=0; i < arr1.length; i++) {
+    let combinedRow = [];
+    for(let j=0; j < arr1[i].length; j++) { 
+     let col = (arr2[i][j] != 0) ? (arr1[i][j]/arr2[i][j]): "DNE";
+     console.log(`col, @ (i=${i+1}, j=${j+1}): ${col}`);
+     if(col != "DNE") { 
+       combinedRow.push(col); 
+     } else {
+       let debugMsgDivision = 
+           "Matrix contains non-divisible elements...\n";
+       console.log(`${debugMsgDivision}`);
+       return debugMsgDivision;
+     } 
+   } 
+   console.log(`combinedRow: ${combinedRow}`);
+   finalArr.push(combinedRow); 
+   } 
+ } else if (op == "m_exp") {
+   for(let i=0; i < arr1.length; i++) {
+    let combinedRow = [];
+    for(let j=0; j < arr1[i].length; j++) {
+     let col = arr1[i][j]**arr2[i][j];
+     console.log(`col, @ (i=${i+1}, j=${j+1}): ${col}`);
+     combinedRow.push(col); 
+    }
+     console.log(`combinedRow: ${combinedRow}`);
+     finalArr.push(combinedRow); 
+    } 
+  } 
+  console.log(`Upon return, finalArr = ${finalArr}`);
+  return finalArr;
+}
