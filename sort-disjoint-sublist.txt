@@ -1,0 +1,12 @@
+let sortDisjoint = (values, indices) => {
+  let sublist = [];
+  indices.sort((a,b) => a - b);
+  for (let i = 0; i < indices.length; i++) {
+    sublist.push(values[indices[i]]);
+  }
+  sublist.sort((a, b) => a-b);
+  for (let i = 0; i < indices.length; i++) {
+    values[indices[i]] = sublist[i];
+  }
+  return values;
+};

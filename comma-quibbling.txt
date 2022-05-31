@@ -1,0 +1,19 @@
+let quibble = (words) => {
+  let newWords = [];
+  const len = words.length;
+  if (len == 1) { /*For exactly one word, just copy into the new array. (Do nothing)*/
+    newWords = [...words];
+  } else if (len > 1) {
+    if (len > 2) { /*Add commas between all but last two words*/
+      newWords = words.slice(0,-2).map(word => `${word},`);
+    } /*Add and 'and' between the last two words*/
+     newWords.push(`${words.slice(len-2,len-1)} and ${words.slice(len-1)}`);
+  }
+  newWords.push('}'); /*Add a trailing bracket*/
+  newWords.unshift('{'); /*Add a leading bracket*/
+  return newWords.join('');/*Join all the elements into a 
+  string and return...*/
+};
+console.log(quibble([]));
+
+

@@ -1,0 +1,13 @@
+let lcs = (a,b) => {
+/*https://en.wikipedia.org/wiki/Longest_common_subsequence_problem#LCS_function_defined*/
+  if (a.length == 0 || b.length == 0) {
+    return "";
+  } else if (a.substring(a.length-1) == b.substring(b.length-1)) {
+    let lastChar = a.substring(a.length-1);
+    return `${lcs(a.substring(0,a.length-1), b.substring(0,b.length-1))}${lastChar}`;
+  } else {
+    let aSubseq = lcs(a,b.substring(0, b.length-1)),
+        bSubseq = lcs(a.substring(0,a.length-1),b);
+    return aSubseq.length > bSubseq.length ? aSubseq : bSubseq;
+  }
+};

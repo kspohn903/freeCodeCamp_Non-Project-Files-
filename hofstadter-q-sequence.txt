@@ -1,0 +1,25 @@
+let hofstadterQ = (n) => {
+  if(n == undefined || n == null || typeof n != 'number') {
+    return `integer`;
+  }
+  let hofQs = hofQSeq(n);
+  return hofQs[hofQs.length-1];
+};
+    const hofQSeq = x =>
+        (x > 2) ? tail(foldl((Q, n) =>
+            (n < 3) ? Q : Q.concat(Q[n-Q[n-1]] + Q[n-Q[n-2]]), [0,1,1],
+            range(1, x))) : ((x > 0) ? (take(x, [1, 1])) : undefined);
+
+   const foldl = (f, a, xs) => xs.reduce(f, a),
+        range = (m, n) => Array.from({ 
+         length: Math.floor(n-m)+1 }, (_, i) => (m+i)), 
+         /*range :: Int -> Int -> [Int]*/
+         tail = xs => xs.length ? xs.slice(1) : undefined,
+         /*tail :: [a] -> [a]*/ /*last :: [a] -> a*/
+         last = xs => xs.length ? xs.slice(-1)[0] : undefined,
+         take = (n, xs) => xs.slice(0, n);/*take :: Int -> [a] -> [a]*/
+
+console.log(`Case 1: n undefined: ${hofstadterQ()}`);
+console.log(`Case 2: n=1000: ${hofstadterQ(1000)}`);
+console.log(`Case 3: n=2000: ${hofstadterQ(2000)}`);
+console.log(`Case 4: n=2500: ${hofstadterQ(2500)}`);

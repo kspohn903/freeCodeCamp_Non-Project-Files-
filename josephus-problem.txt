@@ -1,0 +1,16 @@
+let josephus = (init, kill) => { /*Setup*/ 
+let currPrisoner = -1, numAlive= init;
+  const prisoners = Array(init).fill(true);
+  for (; numAlive > 1; numAlive--) { /*Execute prisoners*/
+  for(let numSkip=kill;numSkip>0; numSkip--) { /*Find next prisoner*/
+    do {
+        console.log(`currPrisoner BEFORE: ${currPrisoner}`);
+        currPrisoner = (currPrisoner+1) % init;
+        console.log(`currPrisoner AFTER: ${currPrisoner}`);
+      } while (!prisoners[currPrisoner]);
+    } /*Execute prisoner*/
+    prisoners[currPrisoner] = false;
+  } /*Return last man standing*/
+  return prisoners.indexOf(true);
+};
+console.log(`josephus(30,3): ${josephus(30,3)}\n`)

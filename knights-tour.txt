@@ -1,0 +1,95 @@
+function knightTour(w, h) {
+   let createBoards = (r,c) => {
+    const board = [], visited = [];
+    for (let i = 0; i < r; i++) {
+      board.push(new Array(c).fill(-1));
+      visited.push(new Array(c).fill(false));
+    } return [board, visited]; 
+  };
+  let copyBoard = (board) => {
+    const copied = [];
+    for (let i = 0; i < board.length; i++) {
+      copied.push([...board[i]]);
+    } 
+    return copied;
+  };
+  let isOnBoard = (value, limit) => value >= 0 && value < limit;
+  function markVisited(board, visited, r, c) {
+    visited[r][c] = true;
+    board[r][c] = -1;
+  }
+  let areAllVisited = (visited) => (visited.filter(row => row.filter(column => column == false).length != 0).length == 0);
+
+  let getMovesFrom = (board, r, c) => {
+    const possibleMoves = [];
+    for (let i = 0; i < moves.length; i++) {
+      const [rowChange, colChange] = moves[i];
+      const [rowN,colN] = [r+rowChange, c+colChange];
+      if (!isOnBoard(rowN,board.length) || 
+      !isOnBoard(colN, board[0].length)) { continue; }
+      possibleMoves.push([rowN, colN]);
+    }
+    return possibleMoves;
+  };
+  
+  function fillAllowedMovesCounts(board) {
+    for (let r = 0; r < board.length; r++) {
+      for (let c = 0; c < board[0].length; c++) {
+        board[r][c] = getMovesFrom(board,r,c).length;
+    } } 
+  }
+  function updateAllowedMovesCounts(board, possibleMoves) {
+    for (let i = 0; i < possibleMoves.length; i++) {
+      const [r, c] = possibleMoves[i];
+      if (board[r][c] > 0) { board[r][c]--; }
+  } }
+
+  let getBestNextMoves = (board, allowedMoves) => {
+    let bestMoves = [],fewestNextMoves = Infinity, zeroMove = [];
+    for (let i = 0; i < allowedMoves.length; i++) {
+      const [moveRow, moveCol] = allowedMoves[i];
+      const numMoves = board[moveRow][moveCol];
+      if (numMoves == -1) { continue; }
+      if (numMoves == 0) { zeroMove.push(allowedMoves[i]); }
+      if (numMoves < fewestNextMoves) {
+        bestMoves = [allowedMoves[i]];
+        fewestNextMoves = numMoves;
+      } else if (numMoves == fewestNextMoves) {
+        bestMoves.push(allowedMoves[i]);
+    } }
+    return (bestMoves.length > 0) ? bestMoves:zeroMove;
+  };
+
+ let solve = (board, visited, lastRow, lastColumn) => {
+    if (areAllVisited(visited)) { return true; }
+    const nextMoves = getMovesFrom(board,lastRow,lastColumn);
+    updateAllowedMovesCounts(board, nextMoves);
+    const allowedMoves = nextMoves.filter(([r,c])=>!visited[r][c]),  bestMoves = getBestNextMoves(board, allowedMoves);
+const restMoves = allowedMoves.filter(move => bestMoves.indexOf(move)== -1), possibleMoves = [...bestMoves];
+    possibleMoves.push(...getBestNextMoves(board, restMoves));
+
+    for (let i = 0; i < possibleMoves.length; i++) {
+      const [moveRow, moveCol] = possibleMoves[i],
+           newBoard = copyBoard(board),
+           newVisited = copyBoard(visited);
+      markVisited(newBoard, newVisited, moveRow, moveCol);
+      if (solve(newBoard,newVisited,moveRow,moveCol)){ return true; }
+    }
+    return false;
+  };
+
+  let solveStart = (board, visited, startRow, startColumn) => {
+    const newBoard = copyBoard(board), 
+          newVisited = copyBoard(visited);
+    markVisited(newBoard, newVisited, startRow, startColumn);
+    return solve(newBoard, newVisited, startRow, startColumn);
+  };
+  const moves = [ [-1,-2],[-2,-1],[-2,1],[-1,2],[1,2],[2,1],[2,-1],[1,-2] ], [baseBoard, baseVisited] = createBoards(h, w);
+  fillAllowedMovesCounts(baseBoard);
+  let solvedCount = 0;
+  for (let r = 0; r < h; r++) {
+    for (let c = 0; c < w; c++) {
+      if (solveStart(baseBoard,baseVisited,r,c)) { solvedCount++; }
+  } }
+  return solvedCount;
+}

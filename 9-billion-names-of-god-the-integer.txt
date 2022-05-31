@@ -1,0 +1,29 @@
+const partitionSeq = [1, 1, 2, 3, 5, 7, 11, 15, 22, 30, 42];
+let partitions = (n) => {
+  if (n < partitionSeq.length) { return partitionSeq[n]; }
+  const terms = [], termk = [];
+  for (let k = 1; k <= n; k++) {
+    if (k * (3*k - 1)/2 <= n) {
+      terms.push(k * (3*k - 1)/2);
+      termk.push(k);
+    }
+    if ((k*-1) * ((3*k*-1)- 1)/2 <= n) {
+      terms.push((k*-1) *((3*k*-1)- 1)/2);
+      termk.push(k*-1);
+  } }
+  let partitionValue = 0;
+  for (let kk in terms) {
+  partitionValue += Math.pow(-1,termk[kk]-1)*partitions(n-terms[kk]);
+  }
+  return partitionValue;
+};
+let numberOfNames = (n) => {
+  for (let i = partitionSeq.length; i <= n; i++) {
+    partitionSeq.push(partitions(i));
+  }
+  return partitionSeq[n];
+}; /*i. Global variable holding sequence
+    ii. Return early if already computed
+    iii. Part. func., based on Euler's Pentagonal No. Thm.  
+   iv. Return computed value. v.  Compute extra values, as needed
+   vi. Return requested value.*/

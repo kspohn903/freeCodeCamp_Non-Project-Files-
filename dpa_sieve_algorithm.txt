@@ -1,0 +1,24 @@
+let getDPA = (n) => {
+  let [deficient, perfect, abundant] = [0, 0, 0];
+  /*Check all numbers in the range*/
+  for (let i = 1; i <= n; i++) {
+    let sum = sumProperDivisors(i);
+    (sum < i) ? (deficient++): (sum==i) ? (perfect++): (abundant++);
+  }
+  return [deficient, perfect, abundant];
+};
+
+let sumProperDivisors = (n) => {
+  let sum = 1; /*Typical Sieve Alg. Setup.*/
+  /*Factors of Sieve alg. for factor = round(sqrt(n)).*/
+  let upper = Math.floor(Math.sqrt(n));
+  for (let j = 2; j <= upper; j++) {
+    if (n % j == 0) {
+      sum += j;
+      sum += n/j;
+  } } /*Remove sqrt if factor to prevent double counting.*/
+  if (upper == Math.sqrt(n)) { sum -= upper; }
+  return sum;
+}
+
+console.log(getDPA(10000));
