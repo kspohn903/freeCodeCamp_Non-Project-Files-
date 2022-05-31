@@ -1,0 +1,12 @@
+let countingFractionsInARange = (lim) => {
+  let res = 0;
+  const stack = [[3, 2]];
+  while (stack.length > 0) {
+    const [startDenom, endDenom] = stack.pop();
+    const curDenom = startDenom + endDenom;
+    if (curDenom <= lim) {
+      res++;
+      stack.push([startDenom, curDenom]);
+      stack.push([curDenom, endDenom]);
+  } } return res; };
+countingFractionsInARange(8);

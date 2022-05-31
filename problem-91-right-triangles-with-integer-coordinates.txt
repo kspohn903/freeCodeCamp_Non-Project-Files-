@@ -1,0 +1,26 @@
+function rightTrianglesIntCoords(limit) {
+  let isRightTriangle = (pts) => {
+    for (let i = 0; i < pts.length; i++) {
+      const ptA = pts[i], ptB = pts[(i+1)%3], ptC = pts[(i+2)%3];
+      const vAB = [ptB[0]-ptA[0], ptB[1]-ptA[1]];
+      const vAC = [ptC[0]-ptA[0],ptC[1]-ptA[1]];
+      if (isRightAngleBetween(vAB,vAC)) { return true; }
+    } return false; };
+  let isRightAngleBetween = (v1,v2) => v1[0]*v2[0] + v1[1]*v2[1] == 0;
+  let getSetKey = (pts) => ('0.0,'+ pts.sort((a,b) => a[0]-b[0]).map(
+    pt => pt.join('.')).join(','));  
+  const ptO = [0, 0], rightTriangles = new Set();
+  for (let x1 = 1; x1 <= limit; x1++) {
+    for (let y1 = 0; y1 <= limit; y1++) {
+      const ptP = [x1, y1];
+      for (let x2 = 0; x2 <= limit; x2++) {
+        for (let y2 = 1; y2 <= limit; y2++) {
+          const ptQ = [x2, y2];
+          if (ptP[0] == ptQ[0] && ptP[1] == ptQ[1]) { continue; }
+          if (isRightTriangle([ptO, ptP, ptQ])) {
+            rightTriangles.add(getSetKey([ptP,ptQ]));
+          } } } 
+  } }
+  return rightTriangles.size;
+}
+rightTrianglesIntCoords(2);

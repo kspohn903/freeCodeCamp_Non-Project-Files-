@@ -1,0 +1,47 @@
+/* test if digits of size n has correctly divisible substrings */
+const DIVISORS = [2, 3, 5, 7, 11, 13, 17];
+let testDivisibility = (digits, n) => {
+  for (let i = 0; i < n-2; i++) {
+    let threeDigits = 100*digits[i+1] + 10*digits[i+2] + digits[i+3];
+    if (threeDigits % DIVISORS[i] != 0) { return false; }
+  }
+  return true;
+};
+let memo = {};
+let factorial = (n) => {
+  if(n <= 1) { return 1; } 
+  else if(memo.hasOwnProperty(n)) { return memo[n]; } 
+  else {
+    let res = factorial(n-1) * n; /* Recursive memoized, add to */
+    memo[n] = res; /* dict. to prevent dup's, then return res. */
+    return res;
+} };
+/* make the next permutation of digits... See https://en.wikipedia.org/wiki/Permutation#Generation_in_lexicographic_order */
+let permuteDigits = (digits) => {
+  const lim = digits.length - 1;
+  for (let i = lim; i >= 0; i--) {
+    if (digits[i] < digits[i+1]) {
+      for (let j = lim; j > i; j--) {
+        if (digits[i] < digits[j]) { /*If not sorted, then swap*/ 
+        [digits[j], digits[i]] = [digits[i], digits[j]];/*ES6 Swap.*/
+          const numSwaps = (lim-i)/2;
+          for (let k = 1; k <= numSwaps; k++) {
+            [digits[i+k], digits[digits.length-k]] = 
+              [digits[digits.length-k], digits[i+k]]; /*ES6 Swap.*/ 
+          } /*Swap k loop forEach noSwaps*/ 
+          return digits;
+      } }
+  } }
+  return digits;
+};
+let substringDivisibility = (n) => {
+  let sum = 0;
+  const noPerms = factorial(n+1); /* Perm = Permutation. */ 
+  let perm = Array(n+1).fill(0).map((_, i) => i); 
+  for (let i = 0; i < noPerms; i++) {
+   if (testDivisibility(perm,n)) { sum += parseInt(perm.join("")); }
+   perm = permuteDigits(perm);
+  }
+  return sum;
+};
+substringDivisibility(5);

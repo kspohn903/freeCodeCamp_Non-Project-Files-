@@ -1,0 +1,19 @@
+/* Find last digts of no**no */
+let powLastDigits = (no,mask) => {
+  let lastDigits = 1;
+  for (let i = 0; i < no; i++) {
+    lastDigits = (lastDigits * no) % mask;
+  }
+  return lastDigits;
+};
+
+let selfPowers = (pow,lastDigits) => {
+  let sum = 0;
+  const mask = 10 ** lastDigits;
+  for (let i = 1; i <= pow; i++) {
+    sum = (sum + powLastDigits(i,mask)) % mask;
+  }
+  return sum;
+};
+
+selfPowers(1000, 10);

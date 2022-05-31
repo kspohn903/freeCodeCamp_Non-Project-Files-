@@ -1,0 +1,19 @@
+function maximumPathSumII(triangle) {
+  const newTriangle = [];
+  for (let i = 0; i < triangle.length; i++) {
+    newTriangle.push(triangle[i].slice());
+  }
+  for (let i = newTriangle.length-2; i >= 0; i--) {
+    for (let j = i; j >= 0; j--) {
+      let higherOption = 0;
+      higherOption = (newTriangle[i+1][j+1] > newTriangle[i+1][j]) ? 
+      newTriangle[i+1][j+1]: newTriangle[i+1][j];
+      newTriangle[i][j] += higherOption;
+  } }
+  return newTriangle[0][0];
+}
+const testTriangle = [[3, 0, 0, 0],
+                      [7, 4, 0, 0],
+                      [2, 4, 6, 0],
+                      [8, 5, 9, 3]];
+maximumPathSumII(testTriangle);

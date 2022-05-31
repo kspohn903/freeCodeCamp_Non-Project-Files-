@@ -1,0 +1,19 @@
+let longestCollatzSequence = (lim) => {
+  let longest = 1, maxLength = 1;
+  for (let i = Math.floor(lim/2); i < lim; i++) {
+    let len = colLen(i);
+    if (len > maxLength) {
+      longest = i;
+      maxLength = len;
+    }
+  } return longest; };
+const knownSequence = { '1': 1 };
+let colLen = (n) => {
+  if (knownSequence[n]) {
+    return knownSequence[n];
+  } else {
+    const len = (n % 2 == 0) ? (colLen(n/2)+1):(colLen((3*n+1)/2)+2);
+    knownSequence[n] = len;
+    return len;
+} };
+longestCollatzSequence(14);

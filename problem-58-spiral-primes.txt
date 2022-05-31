@@ -1,0 +1,21 @@
+function spiralPrimes(percent) {
+  let isPrime = (n) => {
+    if (n <= 3 || (n % 2 == 0 || n % 3 == 0)) {
+      return (n<=3) ? (n>1): (false);
+    } 
+    for (let i = 5; i*i <= n; i += 6) {
+      if (n % i == 0 || n % (i+2) == 0) { return false; }
+    }  return true;  };
+  let totalCount = 1, pCount = 0, curNumber = 1;
+  let curSideLength = 1, ratio = 1;
+  const wantedRatio = percent / 100;
+  while (ratio >= wantedRatio) {
+    curSideLength += 2;
+    for (let i = 0; i < 4; i++) {
+      curNumber += curSideLength - 1;
+      totalCount++;
+      if (i != 3 && isPrime(curNumber)) { pCount++; }
+    } ratio = pCount / totalCount; }
+  return curSideLength;
+}
+spiralPrimes(50);

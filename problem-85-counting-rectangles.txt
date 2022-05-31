@@ -1,0 +1,23 @@
+function countingRectangles(n) {
+  let noRectangles = (h,w) => (h*(h+1)*w*(w + 1))/4;
+  let rectangleArea = (h,w) => h*w;
+  let noRects = 1, maxSide = 1;
+  while (noRects < n) {
+    maxSide++;
+    noRects = noRectangles(maxSide, 1);
+  }
+  let bestDiff = Math.abs(noRects-n), bestSize = [maxSide, 1];
+  let curHeight = maxSide - 1, curWidth = 1;
+  for (curWidth; curWidth < curHeight; curWidth++) {
+    for (curHeight; curHeight > curWidth; curHeight--) {
+      noRects = noRectangles(curHeight, curWidth);
+      const curDiff = Math.abs(noRects-n);
+      if (curDiff < bestDiff) {
+        bestDiff = curDiff;
+        bestSize = [curHeight, curWidth];
+      }
+      if (noRects < n) { break; }
+   } }
+  return rectangleArea(...bestSize);
+}
+countingRectangles(18);

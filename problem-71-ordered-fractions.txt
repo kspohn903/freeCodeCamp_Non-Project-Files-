@@ -1,0 +1,15 @@
+let orderedFractions = (lim) => {
+  const fractions = [], fractionValues = {};
+  let lowBound = 2 / 7, highBound = 3 / 7;
+  for (let denom = lim; denom > 2; denom--) {
+    let num = Math.floor((3*denom - 1) / 7);
+    let val = num / denom;
+    if (val > highBound || val < lowBound) { continue; }
+    fractionValues[val] = [num, denom];
+    fractions.push(val);
+    lowBound = val;
+  }
+  fractions.sort();
+  return fractionValues[fractions[fractions.length - 1]][0];
+};
+orderedFractions(8);

@@ -1,0 +1,13 @@
+function countingSundays(firstYear, lastYear) {
+let sundays = 0;
+for (let year = firstYear; year <= lastYear; year++) {
+    for (let month = 0; month <= 11; month++) {
+        if ((new Date(year, month, 1)).getDay() == 0) {
+            sundays++;
+        }
+    }
+}
+return sundays;
+}
+
+countingSundays(1943, 1946);

@@ -1,0 +1,27 @@
+function pathSumThreeWays(matrix) {
+  let makeMinimumMoveFromUpOrRight = (r,c) => {
+    const curValue = matrix[r][c];
+    return (values[r-1]> values[r]) ? (values[r]+ curValue):
+           (values[r-1]+curValue);
+  };
+  let isGoingFromDownBetter = (r,c) => (values[r] > values[r+1] + 
+  matrix[r][c]);
+  const size = matrix.length, values = [];
+  for (let r = 0; r < size; r++) { values.push(matrix[r][size-1]); }
+  for (let c = size-2; c >= 0; c--) {
+    values[0] += matrix[0][c];
+    for (let r = 1; r < size; r++) {
+      values[r] = makeMinimumMoveFromUpOrRight(r, c); 
+    }
+    for (let r = size - 2; r >= 0; r--) {
+      if (isGoingFromDownBetter(r,c)) {
+        values[r] = values[r+1] + matrix[r][c];
+   } } }
+  return Math.min(...values);
+} /*Only change code above this line*/
+
+const testMatrix1 = [[131, 673, 234, 103, 18], [201, 96, 342, 965, 150],
+[630, 803, 746, 422, 111], [537, 699, 497, 121, 956], 
+[805, 732, 524, 37, 331]];
+
+pathSumThreeWays(testMatrix1);

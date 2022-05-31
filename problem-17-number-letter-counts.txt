@@ -1,0 +1,44 @@
+// Approach inspired by discussion at
+// https://stackoverflow.com/questions/14766951/transform-numbers-to-words-in-lakh-crore-system 
+
+const UNITS = ['','one','two','three','four','five','six','seven',
+'eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen'],
+TENS = ['','','twenty','thirty','forty','fifty','sixty',
+'seventy','eighty','ninety'],
+SHORTSCALE = ['','thousand','million','billion','trillion',
+'quadrillion','quintillion','sextillion','septillion','octillion',
+'nonillion']; /*convert triple of numbers into words*/
+
+let tripleInWords = ([hundreds, tens, ones]) => 
+  [hundreds == 0?'':`${UNITS[hundreds]}hundred`,/*hundreds*/
+  ((10*tens) + ones) < 20 ? '' :`${TENS[tens]}`, /*tens*/
+  (((10*tens)+ones) < 20) ? `${UNITS[10*tens + ones]}`:
+  `${UNITS[ones]}`,/*ones*/ ];
+
+/*convert single number into words*/
+let numInWords = (n) => {/*numbers less than 1 decillion supported*/
+  if (Math.log10(n) > 32) { return NaN; }
+  /*convert to array of triples*/
+  let numToArray = [], nCopy = n;
+  while (nCopy > 0) {
+    const triple = nCopy % 1000;
+    nCopy = Math.floor(nCopy/1000);
+    numToArray.push([
+      Math.floor(triple/100), /*hundreds*/ 
+      Math.floor((triple % 100)/10), /*tens*/
+      Math.floor(triple % 10),/*ones*/ 
+    ]);
+  } /*Convert to words*/
+ return numToArray.map((triple)=>tripleInWords(triple).join(''))
+.map((triple, index) => triple != '' ? `${triple}${SHORTSCALE[index]}`:'').join('') + ((n%100 > 0 && n >= 100) ? 'and' : '');
+};
+
+let numberLetterCounts = (limit) => {/*Sum len of all words=num.*/
+  let numberLetters = 0;
+  for (let i = 1; i <= limit; i++) {
+    numberLetters += numInWords(i).length;
+  }
+  return numberLetters;
+}; 
+console.log(numberLetterCounts(1000)); /*test*/
+numberLetterCounts(5);

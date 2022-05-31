@@ -1,0 +1,56 @@
+/* Initalize prime number list with sieve */
+const PRIMES = Array(1000).fill(false);
+(function initPrimes(num) {
+  const upper = Math.floor((num - 1) / 2);
+  const isPrime = Array(upper).fill(true);
+  const sqrtUpper = Math.floor((Math.sqrt(num) - 1) / 2);
+  for (let i = 0; i <= sqrtUpper; i++) {
+    if (isPrime[i]) {
+      const prime = 2*i + 3; /* Mark value in PRIMES array */
+      PRIMES[prime] = true;
+      /* Mark all multiples of this number as false (not prime) */
+      const primeSqaredIndex = 2 * i ** 2 + 6 * i + 3;
+      for (let j = primeSqaredIndex; j < upper; j += prime)
+        isPrime[j] = false;
+    }
+  }
+  for (let i = sqrtUpper + 1; i < upper; i++) {
+    if (isPrime[i]) { PRIMES[2*i + 3] = true; }
+  }
+ })(1000);
+
+/* Check if num is prime */
+function isPrime(num) {
+  /* Check known primes */
+  if (num < 2) { return false; }
+  if (PRIMES[num] != undefined) { return PRIMES[num]; }
+  const sqrt = parseInt(Math.sqrt(num)); /*Compute if num is prime*/
+  for (let i = 2; i <= sqrt; i++) {
+    if (num % i == 0) { return PRIMES[num] = false; }
+  }
+  return PRIMES[num] = true;
+}
+/* Find cycle length */
+function cycleLength(n) {
+  let k = 1, mod = 10 % n;
+  while (mod != 1) {
+    mod = (mod*10) % n;
+    k++;
+  }
+  return k;
+}
+/* Find longest cycle */
+function reciprocalCycles(n) {
+  let maxCycle = 1, winningDigit = 3;
+  for (let i = 7; i <= n; i++) {
+    if (!isPrime(i)) { continue; }
+    let cycle = cycleLength(i);
+    if (cycle > maxCycle) {
+      maxCycle = cycle;
+      winningDigit = i;
+    }
+  }
+  return winningDigit;
+}
+console.log(`Cases [1,2,3,4]: n = [700,800,900,1000]`);
+console.log(`Case 1: ${reciprocalCycles(700)}\nCase 2: ${reciprocalCycles(800)}\nCase 3: ${reciprocalCycles(900)}\nCase 4: ${reciprocalCycles(1000)}\n`);
