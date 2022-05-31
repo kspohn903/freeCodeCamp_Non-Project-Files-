@@ -1,0 +1,7 @@
+let multiplesOf3and5 = (n) => {
+  let sum = 0, i = 3;
+  for (i;i < n; i++) { if (i%3 == 0 || i%5 == 0) { sum += i; } }
+  return sum;
+};
+
+multiplesOf3and5(1000);

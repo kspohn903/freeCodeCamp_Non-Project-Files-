@@ -1,0 +1,40 @@
+function primeDigitReplacements(n) {
+ let isNFamily = (num,pMap, n) => {
+    const p = num.toString();
+    const lastDigit = p[p.length - 1];
+    return (
+      doesReplacingMakeFamily(p,'0',pMap,n) ||
+      (lastDigit != '1' &&
+        doesReplacingMakeFamily(p,'1',pMap,n)) ||
+        doesReplacingMakeFamily(p,'2',pMap,n) );
+  };
+  let doesReplacingMakeFamily = (p,digitToReplace,pMap,family) => {
+    let count = 0;
+    const replaceWith = '0123456789';
+    for (let i = 0; i < replaceWith.length; i++) {
+      const nextNumber = parseInt(
+        p.replace(new RegExp(digitToReplace, 'g'), replaceWith[i]),
+        10
+      );
+      if (isPartOfFamily(nextNumber, p, pMap)) { count++; }
+    } return count == family; };
+
+  let isPartOfFamily = (n,p,pMap) => (isPrime(n,pMap) && 
+  n.toString().length == p.length); 
+  let getSievePrimes = (max) => {
+      const pMap = new Array(max).fill(true);
+      pMap[0] = false;
+      pMap[1] = false;
+      for (let i = 2; i < max; i++) {
+      if (pMap[i]) {
+        let j = i*i;
+        for (j; j < max; j += i) { pMap[j] = false; }
+     } }  return pMap; };
+  let isPrime = (n,pMap) => pMap[n];
+  const pMap = getSievePrimes(1000000);
+  for (let num = 1; num < 300000; num++) {
+    if (pMap[num]) { if (isNFamily(num,pMap,n)) { return num; } }
+  }
+  return -1;
+}
+primeDigitReplacements(6);

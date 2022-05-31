@@ -1,0 +1,26 @@
+
+const DIVISOR_SUMS = Array(10000).fill(0);
+let sumDivisors = (n) => {
+  if (DIVISOR_SUMS[n]) { return DIVISOR_SUMS[n]; }
+  let sum = 1;
+  let sqrt = Math.floor(Math.sqrt(n));
+  for (let i = 2; i < sqrt; i++) {
+    if (n % i == 0) { sum += i + (n/i); }
+  }
+  if (n % sqrt == 0) { sum += sqrt; }
+  return (DIVISOR_SUMS[n] = sum);
+};
+let sumAmicableNum = (n) => {
+  let sum = 0;
+  for (let i = 1; i < n; i++) {
+    let possiblePair = sumDivisors(i);
+    if (possiblePair != i && sumDivisors(possiblePair) == i) {
+       sum += i; 
+    }
+  }
+  return sum;
+};
+console.log(`Case 1: (n = 1000): ${sumAmicableNum(1000)}`);
+console.log(`Case 2: (n = 2000): ${sumAmicableNum(2000)}`);
+console.log(`Case 3: (n = 5000): ${sumAmicableNum(5000)}`);
+console.log(`Case 4: (n = 10000): ${sumAmicableNum(10000)}`);

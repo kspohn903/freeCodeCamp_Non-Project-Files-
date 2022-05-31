@@ -1,0 +1,25 @@
+function diophantineEquation(n) {
+/*Based on https://www.mathblog.dk/project-euler-66-diophantine-equation/ */
+  let isSolution = (D, num, denom) => 
+  num * num - BigInt(D) * denom * denom === 1n;
+  let result = 0, biggestX = 0;
+  for (let D = 2; D <= n; D++) {
+    let boundary = Math.floor(Math.sqrt(D));
+    if (boundary ** 2 == D) { continue; }
+    let m = 0n, d = 1n, a = BigInt(boundary);
+    let [num, prevNum] = [a, 1n];
+    let [denom, prevDenom] = [1n, 0n];
+    while (!isSolution(D, num, denom)) {
+      m = d * a - m;
+      d = (BigInt(D) - m*m)/d;
+      a = (BigInt(boundary)+m)/d;
+      [num, prevNum] = [a*num + prevNum, num];
+      [denom, prevDenom] = [a*denom + prevDenom, denom];
+    }
+    if (num > biggestX) {
+      biggestX = num;
+      result = D;
+  } }
+  return result;
+}
+diophantineEquation(7);

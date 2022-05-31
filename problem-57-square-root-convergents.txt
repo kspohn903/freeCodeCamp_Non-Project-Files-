@@ -1,0 +1,15 @@
+let squareRootConvergents = (n) => {
+  let countDigits = (num) => {
+    let counter = 0;
+    while (num > 0) {
+      counter++;
+      num /= 10n;
+    } return counter; }; 
+    /*Use BigInt as integer won't handle all cases*/
+  let num = 3n, denom = 2n;
+  let moreDigitsInNum = 0;
+  for (let i = 2; i <= n; i++) {
+    [num,denom] = [num + 2n*denom, denom+num];
+    if (countDigits(num) > countDigits(denom)) { moreDigitsInNum++; }
+  } return moreDigitsInNum; };
+squareRootConvergents(1000);

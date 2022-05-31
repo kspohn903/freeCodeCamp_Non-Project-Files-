@@ -1,0 +1,14 @@
+let spiralDiagonals = (n) => {
+  /* Start with a 1x1 spiral */
+  let sum = 1, size = 1, upperRightCorner = 1;
+  while (size < n) {
+    size += 2;
+    /* Formula for sum increase when adding one layer */
+    sum += upperRightCorner * 4 + 10 * (size-1);
+    upperRightCorner = size ** 2;
+  }
+  console.log(`Before Returning sum: sum = ${sum}`);
+  return sum;
+};
+
+spiralDiagonals(1001);

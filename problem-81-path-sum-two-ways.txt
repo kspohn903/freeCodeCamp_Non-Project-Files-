@@ -1,0 +1,27 @@
+function pathSumTwoWays(matrix) {
+  let makeMinimalMove = (r,c) => 
+    (resultMatrix[r][c+1] < resultMatrix[r+1][c]) ? 
+    resultMatrix[r][c+1]: resultMatrix[r+1][c];
+  const size = matrix.length, resultMatrix = [];
+  for (let i = 0; i < size; i++) { resultMatrix.push([...matrix[i]]); }
+  for (let i = size-2; i >= 0; i--) {
+    resultMatrix[size-1][i] += resultMatrix[size-1][i+1];
+    resultMatrix[i][size-1] += resultMatrix[i+1][size-1];
+  }
+  for (let r = size-2; r >= 0; r--) {
+    for (let c = size-2; c >= 0; c--) {
+      resultMatrix[r][c] += makeMinimalMove(r,c); 
+  } }
+  return resultMatrix[0][0];
+}
+// Only change code above this line
+
+const testMatrix1 = [
+  [131, 673, 234, 103, 18],
+  [201, 96, 342, 965, 150],
+  [630, 803, 746, 422, 111],
+  [537, 699, 497, 121, 956],
+  [805, 732, 524, 37, 331]
+];
+
+pathSumTwoWays(testMatrix1);

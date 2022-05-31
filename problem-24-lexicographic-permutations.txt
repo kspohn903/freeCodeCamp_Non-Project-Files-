@@ -1,0 +1,16 @@
+const FACTORIALS = Array(9).fill(0).reduce(
+  (factorials, _, idx) => {
+    factorials.push(factorials[idx] * (idx + 1));
+    return factorials;
+  }, [1]).reverse();
+
+function lexicographicPermutations(n) {
+  const digits = [0,1,2,3,4,5,6,7,8,9];
+  let permuted = "";
+  for (let i = 0; i < 10; i++) {
+    permuted += digits.splice(Math.floor(n/FACTORIALS[i]), 1);
+    n %= FACTORIALS[i];
+  }
+  return Number(permuted);
+}
+console.log(`Case 1: ${lexicographicPermutations(699999)}\nCase 2: ${lexicographicPermutations(899999)}\nCase 3: ${lexicographicPermutations(900000)}\nCase 4: ${lexicographicPermutations(999999)}`)

@@ -1,0 +1,18 @@
+let isPentagonal = (num) => {
+  const n = (Math.sqrt(24 * num + 1) + 1)/6;
+  return (n - parseInt(n) == 0) ? n : 0;
+};
+let nearestHexagonal = (n) => parseInt((Math.sqrt(8*n + 1) + 1)/4);
+let hex = (n) => n*(2*n - 1);
+function triPentaHexa(num) {
+  let n = nearestHexagonal(num) + 1, h_n = hex(n);
+  /* Note, each hexagonal number is also triangular so we 
+     only need to check for pentagonal */
+  while (!isPentagonal(h_n)) {
+    n++;
+    h_n = hex(n);
+  }
+  return h_n;
+}
+
+triPentaHexa(40756);

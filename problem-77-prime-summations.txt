@@ -1,0 +1,29 @@
+function primeSummations(n) {
+let getSievePrimes = (max) => {
+    const pMap = new Array(max).fill(true);
+    pMap[0] = false;
+    pMap[1] = false;
+    const primes = [];
+    for (let i = 2; i < max; i += 2) {
+      if (pMap[i]) {
+        primes.push(i);
+        for (let j = i * i; j < max; j += i) {
+          pMap[j] = false;
+        } }
+      if (i === 2) { i = 1; }
+    }
+    return primes;
+  };
+  const MAX_NUMBER = 100, primes = getSievePrimes(MAX_NUMBER);
+  for (let curNumber = 2; curNumber < MAX_NUMBER; curNumber++) {
+    const combinations = new Array(curNumber + 1).fill(0);
+    combinations[0] = 1;
+    for (let i = 0; i < primes.length; i++) {
+      for (let j = primes[i]; j <= curNumber; j++) {
+        combinations[j] += combinations[j-primes[i]];
+     } }
+    if (combinations[curNumber] > n) { return curNumber; }
+  }
+  return false;
+}
+primeSummations(5);

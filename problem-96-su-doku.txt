@@ -1,0 +1,51 @@
+function suDoku(puzzlesArr) {
+  let solve = (puzzle) => {
+    for (let r = 0; r < 9; r++) {
+      for (let c = 0; c < 9; c++) {
+        if (puzzle[r][c] > 0) { continue; }
+        const allowedNumbers = getAllowedNumbers(puzzle,r,c);
+        for (let n = 1; n <= 9; n++) {
+          if (allowedNumbers[n]) {
+            puzzle[r][c] = n;
+            if (solve(puzzle)) { return true; }
+         } }
+        puzzle[r][c] = 0;
+        return false;
+      } } return true; };
+
+  let getAllowedNumbers = (puzzle,r,c) => {
+    const allowed = new Array(10).fill(true);
+    allowed[0] = false;
+    for (let i = 0; i < 9; i++) {
+      const numInSameRow = puzzle[r][i];
+      if (numInSameRow > 0) { allowed[numInSameRow] = false; }
+      const numInSameCol = puzzle[i][c];
+      if (numInSameCol > 0) { allowed[numInSameCol] = false; }
+    }
+    const rSubGrid = Math.floor(r/3)*3, cSubGrid = Math.floor(c/3)*3;
+    for (let rInSubGrid = 0; rInSubGrid < 3; rInSubGrid++) {
+      for (let cInSubGrid = 0; cInSubGrid < 3; cInSubGrid++) {
+        const numInSameSubGrid =
+          puzzle[rSubGrid + rInSubGrid][cSubGrid + cInSubGrid];
+        if (numInSameSubGrid > 0) { allowed[numInSameSubGrid] = false;}
+     } } return allowed; };
+
+  let parsePuzzle = (str) => {
+    const puzzle = [];
+    for (let r = 0; r < 9; r++) {
+      puzzle.push(str.slice(r*9, 9+r*9).split('').map(
+        x => parseInt(x,10)) );
+    } return puzzle; };
+  let sum = 0;
+  for (let i = 0; i < puzzlesArr.length; i++) {
+    const puzzle = parsePuzzle(puzzlesArr[i]);
+    if (solve(puzzle)) {
+      sum += 100*puzzle[0][0] + 10*puzzle[0][1] + puzzle[0][2];
+    } }
+  return sum;
+} /*Only change code above this line*/
+
+const testPuzzles1 = [
+'003020600900305001001806400008102900700000008006708200002609500800203009005010300',  '200080300060070084030500209000105408000000000402706000301007040720040060004010003',
+'000000907000420180000705026100904000050000040000507009920108000034059000507000000'];
+suDoku(testPuzzles1);

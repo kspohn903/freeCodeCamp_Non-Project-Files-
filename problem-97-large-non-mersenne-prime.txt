@@ -1,0 +1,14 @@
+function largeNonMersennePrime(mult,pow) {
+  let modStepsResults = (num,other,mod,startVal,step) => {
+    let res = startVal;
+    for (let i = 0; i < other; i++) { res = step(num,res) % mod; }
+    return res;
+  };
+  const noDigits = 10;
+  const mod = 10 ** noDigits;
+  const digitsAfterPow = modStepsResults(2,pow,mod,1,(a,b) => a*b);
+  const digitsAfterMultiply = modStepsResults(digitsAfterPow, mult, mod, 0, (a,b) => a+b);
+  const lastDigits = (digitsAfterMultiply + 1) % mod;
+  return lastDigits.toString().padStart(10,'0');
+}
+largeNonMersennePrime(19, 6833086);

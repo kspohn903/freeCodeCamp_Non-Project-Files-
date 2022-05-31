@@ -1,0 +1,25 @@
+let numSolns = (p) => {
+  let counter = 0;
+  for (let side1 = Math.floor(p / 4); side1 < p / 2; side1++) {
+    /* Formula for the 2nd side given side1 + p */
+    let side2 = p*(p-2*side1)/(2*p - 2*side1);
+    if (side1 > side2 && Number.isInteger(side2)) { counter++; }
+  }
+  return counter;
+};
+
+function intRightTriangles(n) {
+  let bestP = 0, mostSolns = 0;
+  for (let p = 12; p < n; p++) {
+    /* Right triangles can't have one odd side */
+    if (p % 3 == 1) { continue; }
+    const numSolnsP = numSolns(p);
+    if (numSolnsP > mostSolns) {
+      bestP = p;
+      mostSolns = numSolnsP;
+    }
+  }
+  return bestP;
+}
+console.log(`Cases: [1,2,3,4]: n = [500,800,900,1000]`);
+console.log(`Case 1: ${intRightTriangles(500)}\nCase 2: ${intRightTriangles(800)}\nCase 3: ${intRightTriangles(900)}\nCase 4: ${intRightTriangles(1000)}`);

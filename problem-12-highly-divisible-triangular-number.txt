@@ -1,0 +1,17 @@
+let divisibleTriangleNumber = (n) => {
+  let i = 1,triangleNumber = i;
+  /*Compute triangular numbers until n divisors found*/
+  while (numOfDivisors(triangleNumber) < n) {
+    i += 1;
+    triangleNumber += i;
+  }
+  return triangleNumber;
+};
+let numOfDivisors = (n) => {
+  let count = 0; /*Divisors come in pairs*/
+  for (let i = 1; i < Math.sqrt(n); i++)
+    if (n % i == 0) { count += 2; } /*Except for the sqrt*/
+  if (n % Math.sqrt(n) == 0) { count += 1; }
+  return count;
+};
+divisibleTriangleNumber(500);

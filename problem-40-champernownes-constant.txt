@@ -1,0 +1,26 @@
+/* Break Champernowne's constant into blocks, 
+   divided by how many digits we are adding */
+function getDigit(n) {
+  /* lower is the number of digits before this block
+     upper is the number of digits after/with this block */
+  let lower = 0, upper = 0, digitsPerNum = 0;
+  while (n > upper) {
+    lower = upper;
+    upper += 9 * 10 ** digitsPerNum * ++digitsPerNum;
+  } /* How many digits into the block we need to look */
+  const digitsIntoBlock = n - lower - 1;
+  /* Find the number which has the digit we want */
+  const num = 10 ** (digitsPerNum - 1) + 
+    (digitsIntoBlock / digitsPerNum); /* Return the specific digit */
+  return num.toString()[digitsIntoBlock % digitsPerNum];
+}
+function champernownesConstant(n) {
+  let product = 1;
+  for (let i = 1; i <= n; i *= 10) {
+    product *= getDigit(i);
+  }
+  return product;
+}
+
+console.log(`Cases [1,2,3]: [100,1000,1.0e6]`);
+console.log(`Case 1: ${champernownesConstant(100)}\nCase 2: ${champernownesConstant(1000)}\nCase 3: ${champernownesConstant(1.0e6)}`);
