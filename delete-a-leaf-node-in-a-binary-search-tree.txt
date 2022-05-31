@@ -1,0 +1,32 @@
+let displayTree = tree => console.log(JSON.stringify(tree, null, 2));
+
+function Node(value) {
+  this.value = value;
+  this.left  = null;
+  this.right = null;
+}
+
+function BinarySearchTree() {
+  this.root = null;
+   /* Only change code below this line */
+  this.remove = (el) => {
+    if (!this.root) { return null; }
+    /* find the node */
+    let parent;
+    let target = this.root;
+    while (target && target.value !== el) {
+      parent = target;
+      target = (target.value > el) ? (target.left):(target.right);
+    }
+    if (!target) { 
+      return null; 
+    }
+    /* remove the node -- root node */
+    if (!parent) {
+      this.root = null;
+    } else { /* -- other node */
+      const direction = (parent.left === target) ? "left" : "right";
+      parent[direction] = null;
+    }
+  };
+}

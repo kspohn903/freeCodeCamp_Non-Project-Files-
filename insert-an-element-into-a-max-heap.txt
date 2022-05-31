@@ -1,0 +1,15 @@
+let MaxHeap = function() {
+  this.heap = [null];
+  this.insert = (ele) => {
+    let index = this.heap.length, 
+        arr = [...this.heap];
+    arr.push(ele);
+    while (ele > arr[Math.floor(index/2)] && index > 1) {
+      arr[index] = arr[Math.floor(index/2)];
+      arr[Math.floor(index/2)] = ele;
+      index = arr[Math.floor(index/2)];
+    } 
+    this.heap = arr; 
+  };  
+  this.print = () => this.heap.slice(1);
+};

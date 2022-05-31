@@ -1,0 +1,30 @@
+function Set() {
+    let collection = [];
+    this.has = (element) => (collection.indexOf(element) != -1);
+    this.values = () => collection;
+    this.size = () => collection.length;
+    this.add = (element) => {
+        if(!this.has(element)){
+           collection.push(element);
+           return true;
+        } 
+        return false; 
+    };
+
+    this.remove = (element) => {
+        if(this.has(element)){
+           let index = collection.indexOf(element);
+           collection.splice(index,1);
+           return true;
+      } 
+      return false; 
+    };
+
+    this.union = (anotherSet) => {
+        const newSet = new Set();
+        const addToSet = el => newSet.add(el);
+        this.values().forEach(addToSet);
+        anotherSet.values().forEach(addToSet);
+        return newSet;
+    };
+}
