@@ -1,0 +1,2 @@
+let Y = f => (x => x(x))(y => f(x => y(y)(x)));
+let fac = Y(f => n => (n > 1) ? n*f(n-1) : 1);

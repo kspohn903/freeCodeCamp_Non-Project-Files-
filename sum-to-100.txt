@@ -1,0 +1,49 @@
+function sumTo100(n) {
+  let permutationsWithRepetition = (n,as) => as.length > 0 ?
+      foldl1(curry(cartesianProduct)(as), replicate(n, as)) : [], 
+    
+    cartesianProduct = (xs,ys) => {
+    return [].concat.apply([], xs.map( (x) => {
+      return [].concat.apply([], ys.map( (y) => [[x].concat(y)] ));
+    } ) );
+  }, 
+    curry = (f) => (a) => (b) => f(a, b),
+    flip = function(f) {
+    return function(a,b) { return f.apply(null, [b, a]); };
+   }, 
+  foldl1 = (f,xs) => xs.length > 0 ? xs.slice(1).reduce(f,xs[0]):[], replicate = (n,a) => {
+    let v = [a], o = [];
+    if (n < 1) { return o; }
+    while (n > 1) {
+      if (n & 1) { o = o.concat(v); }
+      n >>= 1;
+      v = v.concat(v);
+    }
+    return o.concat(v);
+  }, 
+  asSum = (xs) => {
+    let dct = xs.reduceRight( (a, sign, i) => {
+      let d = i + 1; /*zero-based index to [1-9] positions*/
+      if (sign != 0) { /*Sum increased, digits cleared*/
+        return {
+          digits: [],
+          n: a.n+sign*parseInt([d].concat(a.digits).join(''),10)
+        };
+      } else return {/*Digits extended, sum unchanged*/
+        digits: [d].concat(a.digits),
+        n: a.n
+      }; }, { digits: [], n: 0 });
+    return dct.n + (dct.digits.length > 0 ? parseInt(dct.digits.join(''), 10) : 0);
+  }, 
+    asString = (xs) => {
+    let ns = xs.reduce((a, sign, i) => {
+      let d = (i+1).toString();
+      return sign == 0 ? a + d : a + (sign > 0 ? '+':'-') + d;
+    },'');
+    return ns[0] == '+' ? tail(ns) : ns;
+  },
+  universe = permutationsWithRepetition(9, [0, 1, -1])
+  .filter((x) => x[0] != 1 && asSum(x) == n).map(asString);
+  
+  return universe.sort();
+}/*end of sumTo100(n)*/ 

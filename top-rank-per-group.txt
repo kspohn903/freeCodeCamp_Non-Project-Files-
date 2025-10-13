@@ -1,0 +1,20 @@
+const collectDept = (arrOfObj, groupName) => {
+  const collect = arrOfObj.reduce((rtnObj,obj) => {
+    if (rtnObj[obj[groupName]] == undefined) {
+      rtnObj[obj[groupName]] = [];
+    }
+    rtnObj[obj[groupName]].push(obj);
+    return rtnObj;
+  }, {}); /*initial value to reduce*/
+  return Object.keys(collect).sort().map(key => collect[key]);
+};
+
+const sortRank = (arrOfRankArrs, rankName) => {
+  return arrOfRankArrs.map(item => item.sort((a,b) => {
+  return (a[rankName] > b[rankName]) ? -1: (a[rankName] < b[rankName]) ? 1: 0; } ) ); };
+
+let topRankPerGroup = (n,data,groupName,rankName) => {
+  if (n < 0) { return; }
+  return sortRank(collectDept(data, groupName),
+    rankName).map(list => list.slice(0, n));
+};

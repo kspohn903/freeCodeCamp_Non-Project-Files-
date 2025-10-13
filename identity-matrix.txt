@@ -1,0 +1,12 @@
+function idMatrix(n) {
+let identity = [];
+for(let i =0; i<n; i++) {
+  let row = [];
+  for (let j =0; j<n; j++){
+      row.push((i==j)? 1: 0);
+  }
+  identity.push(row);
+}
+console.log(`Before returning, identity: ${identity}\n`);
+return identity;
+}

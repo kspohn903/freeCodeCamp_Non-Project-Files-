@@ -1,0 +1,1 @@
+let IBeforeExceptC = (word) => word.indexOf("cei") != -1;

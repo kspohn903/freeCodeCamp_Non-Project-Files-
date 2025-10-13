@@ -1,0 +1,9 @@
+function sternBrocot(num) {
+  function f(n) {
+    return n < 2 ? n : (n & 1) ? f(Math.floor(n / 2)) + f(Math.floor(n / 2 + 1)) : f(Math.floor(n / 2));
+  }
+  let gcd = (a,b) => a ? a < b ? gcd(b % a, a) : gcd(a % b, b) : b;
+  var n;
+  for (n = 1; f(n) != num; n++);
+  return n;
+}

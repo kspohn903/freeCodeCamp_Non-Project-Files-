@@ -1,0 +1,10 @@
+function isLychrel(n) {
+  let reverse = (num) => {
+    return parseInt(num.toString().split('').reverse().join(''));
+  }, i;
+  for (i = 0; i < 500; i++) {
+    n += reverse(n);
+    if (n == reverse(n)) break;
+  }
+  return i == 500;
+}

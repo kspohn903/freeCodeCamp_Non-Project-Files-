@@ -1,0 +1,25 @@
+let findSequence = (input) => {
+  const predecessors = [], subIndices = [];
+  let subLen = 0;
+  for (let i = 0; i < input.length; i++) {
+    let low = 1, high = subLen;
+    while (low <= high) {
+      let middle = Math.ceil((low + high)/2);
+      if (input[subIndices[middle]] < input[i])
+        low = middle + 1;
+      else
+        high = middle - 1;
+    }
+    let newLen = low;
+    predecessors[i] = subIndices[newLen-1];
+    subIndices[newLen] = i;
+    if (newLen > subLen) {
+      subLen = newLen;
+} }
+  let subsequence = [], k = subIndices[subLen];
+  for (let i = subLen - 1; i >= 0; i--) {
+    subsequence.unshift(input[k]);
+    k = predecessors[k];
+  }
+  return subsequence;
+};

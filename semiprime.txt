@@ -1,0 +1,30 @@
+function isSemiPrime(n) {
+  if (n <= 3) { return false; }
+  var ans = [], done = false;
+  while (!done) {
+    if (n % 2 == 0 || n % 3 == 0) {
+      let el = (n%2==0) ? 2: 3;
+      ans.push(el);
+      n /= el;
+      continue;
+    }
+    if (n == 1) { return ans.length == 2; }
+    let sr = Math.sqrt(n);
+    done = true; /*try to divide the checked 
+    number by all numbers till its square root.*/
+    for (let i = 6; i <= sr; i += 6) {
+      if (n % (i-1) == 0) {/*is n divisible by i-1?*/
+        ans.push(i-1);
+        n /= (i-1);
+        done = false;
+        break;
+      }
+      if (n % (i+1) == 0) {/*is n divisible by i+1?*/
+        ans.push(i+1);
+        n /= (i+1);
+        done = false;
+        break;
+    } } }
+  ans.push(n);
+  return ans.length == 2;
+}

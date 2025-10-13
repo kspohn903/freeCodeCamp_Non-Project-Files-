@@ -1,0 +1,27 @@
+let isValid = (iban) => {
+  if (iban.match(/\[^A-Z0-9]+/) || 
+      iban[0].charCodeAt(0) < 'A'.charCodeAt(0) ||
+      iban[0].charCodeAt(0) > 'Z'.charCodeAt(0) ||
+      iban[1].charCodeAt(0) < 'A'.charCodeAt(0) ||
+      iban[1].charCodeAt(0) > 'Z'.charCodeAt(0)) {
+    /*Check for non-alphanumeric and 2 letter start*/
+    return false;
+  }
+  let sections = iban.split(' '); /*Rearrange sections*/
+  sections.push(sections.shift()); /*Convert to integer*/
+  sections = sections.map((section) => section.split('').map(
+    (char) => char.charCodeAt(0) >= 'A'.charCodeAt(0) &&
+              char.charCodeAt(0) <= 'Z'.charCodeAt(0) ?
+    (char.charCodeAt(0) - 'A'.charCodeAt(0) + 10) : char).join('') );
+  const num = sections.join(''); /*Check the check digit*/
+  return extendedMod(num, 97) == 1;
+};
+let extendedMod = (num, modulo) => {
+  const digits = num.split('');/*Compute mod of 30 digit number*/
+  let currentDigits = [digits.splice(0, 9).join('')];
+  while (digits.length > 0) {
+    currentDigits = (parseInt(currentDigits) % modulo).toString();
+    currentDigits += digits.splice(0, 7).join('');
+  }
+  return currentDigits % modulo;
+};

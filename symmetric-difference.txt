@@ -1,0 +1,15 @@
+function symmetricDifference(A, B) {
+  let relative_complement = (A,B) => {
+    return A.filter((el) => B.indexOf(el) == -1);
+    },
+    unique = (ary) => {
+    let u = ary.concat().sort();
+    for (let i = 1; i < u.length;) {
+      if (u[i-1] == u[i]) { 
+        u.splice(i,1); 
+      } else { 
+        i++; 
+    } } return u; };
+
+  return unique(relative_complement(A,B).concat(relative_complement(B,A) )).sort();
+}

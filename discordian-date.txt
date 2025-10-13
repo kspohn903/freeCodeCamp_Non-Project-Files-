@@ -1,0 +1,50 @@
+/*source: https://rosettacode.org/wiki/Discordian_date#JavaScript */
+let seasons = ["Chaos","Discord","Confusion","Bureaucracy", 
+"The Aftermath"],
+    weekday = ["Sweetmorn","Boomtime","Pungenday","Prickle-Prickle", "Setting Orange"], 
+    apostle = ["Mungday","Mojoday","Syaday","Zaraday","Maladay"],       holiday = ["Chaoflux","Discoflux","Confuflux","Bureflux","Afflux"];
+
+let isLeapYear = (date) => {
+  let year = date.getFullYear();
+  if((year & 3) != 0 ) { return false; }
+  return ((year % 100) != 0 || (year % 400) == 0);
+};
+/*Get Day of Year*/
+let getDOY = (date) => {
+  let dayCount  = [0,31,59,90,120,151,181,212,243,273,304,334],
+      mn = date.getMonth(), dn = date.getDate();
+  let dayOfYear = dayCount[mn] + dn;
+  if(mn > 1 && isLeapYear(date)) { dayOfYear++; }
+  return dayOfYear;
+};
+let isToday = (date) => {
+  let today = new Date();
+  return date.getDate() == today.getDate() && 
+         date.getMonth() == today.getMonth() && 
+         date.getFullYear() == today.getFullYear();
+}; 
+let discordianDate = (date) => {
+  if( !date ) { date = new Date(); }
+  let y = date.getFullYear(), yold = y + 1166,
+      dayOfYear = getDOY(date), celebrateHoliday = null;
+  if(isLeapYear(date)) {
+    if(dayOfYear == 60) { celebrateHoliday = "St. Tib's Day"; }
+    else if(dayOfYear > 60) { dayOfYear--; }
+  }
+  dayOfYear--;
+  let divDay = Math.floor(dayOfYear/73), seasonDay = (dayOfYear % 73) + 1;
+  if(seasonDay == 5) { celebrateHoliday = apostle[divDay]; }
+  if(seasonDay == 50) { celebrateHoliday = holiday[divDay]; }
+  let season = seasons[divDay], dayOfWeek = weekday[dayOfYear % 5];
+  let nth = (seasonDay % 10 == 1) ? 'st' : (seasonDay % 10 == 2) ? 'nd': 
+            (seasonDay % 10 == 3) ? 'rd' : 'th';
+  let celebrateStr = (celebrateHoliday ? `. Celebrate ${celebrateHoliday}!` : '');
+  let retStr = `${dayOfWeek}, the ${seasonDay}${nth} day of ${season} in the YOLD ${yold}${celebrateStr}`;
+  /*console.log(`${retStr}\n`);*/
+  return retStr; /*(date.isToday() ? "Today is " : '')*/
+};
+
+let dates = [new Date(2010, 6, 22), new Date(2012, 1, 28), new Date(2012, 1, 29)];
+for(let i = 0; i < dates.length; i++) {
+  console.log(`${discordianDate(dates[i])}\n`);
+}

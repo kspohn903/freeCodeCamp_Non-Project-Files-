@@ -1,0 +1,44 @@
+let knapsackUnbounded = (items,maxW,maxVol) => {  
+  let getPickTotals = (items, pick) => {
+    let totVal = 0, totW = 0, totVol = 0;
+    for (let i = 0; i < items.length; i++) {
+      totVal += pick[i] * items[i].value;
+      totW += pick[i] * items[i].weight;
+      totVol += pick[i] * items[i].volume;
+    }
+    return [totVal, totW, totVol];
+  };
+  let getMaxes = (items, maxW, maxVol) => {
+    const maxes = [];
+    for (let i = 0; i < items.length; i++) {
+      const maxUnitsInW = Math.floor(maxW/items[i].weight);
+      const maxUnitsInVol = Math.floor(maxVol/items[i].volume);
+      const maxUnitsInLim = Math.min(maxUnitsInW,maxUnitsInVol);
+      maxes.push(maxUnitsInLim);
+    } return maxes; 
+  };
+  let isInLim = (val, lim) => (val <= lim);
+
+  let getCombinations = (maxVals, curPicks, combinations) => {
+    if (maxVals.length == 0) { combinations.push(curPicks); }
+    const curMax = maxVals[0];
+    const leftMaxVals = maxVals.slice(1);
+    for (let i = 0; i <= curMax; i++) {
+      getCombinations(leftMaxVals,curPicks.concat(i),combinations);
+    } return combinations;
+  };  
+  let bestVal = 0, bestPick = [];
+  const maxes = getMaxes(items, maxW, maxVol);
+  const combinations = getCombinations(maxes, [], []);
+  for (let i = 0; i < combinations.length; i++) {
+     const curPick = combinations[i];
+     const [curVal, curW, curVol] = getPickTotals(items, curPick);
+    if(!isInLim(curW, maxW)||!isInLim(curVol, maxVol)) { continue; }
+    if (curVal > bestVal) {
+      bestVal = curVal;
+      bestPick = [curPick];
+    } else if (curVal == bestVal) { bestPick.push(curPick); }
+  }
+  return bestVal;
+};
+console.log(`Case 4 best_val: ${knapsackUnbounded([{ name:"panacea", value:3000, weight:0.3, volume:0.025 }, { name:"ichor", value:1800, weight:0.2, volume:0.015 }, { name:"gold", value:2500, weight:2, volume:0.002 }], 35, 0.35)}\n`);

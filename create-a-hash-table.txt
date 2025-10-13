@@ -17,7 +17,6 @@ let HashTable = function() {
     } 
     this.collection[theHash][key] = val; 
   };
-  
   this.remove = (key) => {
     let hashedObj = this.collection[hash(key)];
     if (hashedObj.hasOwnProperty(key)) { 
@@ -26,8 +25,7 @@ let HashTable = function() {
     if (!Object.keys(hashedObj).length) {
       delete this.collection[hash(key)];
     } 
-   };
-   
+   };   
    this.lookup = (key) => {
     let theHash = hash(key);
     return (this.collection.hasOwnProperty(theHash)) ? 

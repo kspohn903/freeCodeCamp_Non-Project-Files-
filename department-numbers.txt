@@ -1,0 +1,10 @@
+let combinations = (arr, max) => { 
+    /*concatMap :: (a -> [b]) -> [a] -> [b]*/
+    const concatMap = (f, xs) => [].concat.apply([], xs.map(f));
+    /*let col1= `(Police, Sanitation, Fire)\n`;*/
+    return concatMap(x => concatMap(y => concatMap(z =>
+        z != y && 1 <= z && z <= 7 ? [[x,y,z]] :[], [max-(x+y)]), 
+        arr), [2,4,6]);
+};
+console.log(`C1: ${combinations([1,2,3], 6)}`);
+console.log(`C2: ${combinations([1,2,3,4,5,6,7], 12)}`);

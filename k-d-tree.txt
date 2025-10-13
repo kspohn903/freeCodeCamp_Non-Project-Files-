@@ -1,0 +1,199 @@
+function kdNN(fpoints, fpoint) {
+  function Node(obj, dimension, parent) {
+    this.obj = obj;
+    this.left = null;
+    this.right = null;
+    this.parent = parent;
+    this.dimension = dimension;
+  }
+  function kdTree(points, metric, dimensions) {
+    let self = this;
+    let buildTree = (points, depth, parent) => {
+      let dim = depth % dimensions.length, median, node;
+      if (points.length == 0) { return null; }
+      if (points.length == 1) {
+        return new Node(points[0], dim, parent);
+      }
+      points.sort((a,b) => a[dimensions[dim]] - b[dimensions[dim]] );
+      median = Math.floor(points.length/2);
+      node = new Node(points[median], dim, parent);
+      node.left = buildTree(points.slice(0,median),depth+1,node);
+      node.right = buildTree(points.slice(median+1),depth+1,node);
+      return node;
+    };
+    this.root = buildTree(points, 0, null);
+    this.insert = function (point) {
+      let innerSearch = (node, parent) => {
+        if (node == null) { return parent; }
+        let dimension = dimensions[node.dimension];
+        return (point[dimension] < node.obj[dimension]) ? 
+        innerSearch(node.left,node): innerSearch(node.right,node);
+      };
+      let insertPosition = innerSearch(this.root, null), 
+          newNode, dimension;
+      if (insertPosition == null) {
+        this.root = new Node(point, 0, null);
+        return;
+      }
+      newNode = new Node(point,(insertPosition.dimension + 1) % dimensions.length, insertPosition);
+      dimension = dimensions[insertPosition.dimension];
+      if (point[dimension] < insertPosition.obj[dimension]) {
+        insertPosition.left = newNode;
+      } else {
+        insertPosition.right = newNode;
+      }
+    };
+
+    this.nearest = (point, maxNodes, maxDistance) => {
+      let i, result, bestNodes;
+      bestNodes = new BinaryHeap((e) => -e[1]);
+      function nearestSearch(node) {
+        let bestChild, dimension = dimensions[node.dimension],
+            ownDistance = metric(point, node.obj),
+            linearPoint = {}, linearDistance, otherChild, i;
+         function saveNode(node, distance) {
+           bestNodes.push([node, distance]);
+           if (bestNodes.size() > maxNodes) { bestNodes.pop(); }
+        }
+        for (i = 0; i < dimensions.length; i += 1) {
+          linearPoint[dimensions[i]] = (i == node.dimension) ? 
+           (point[dimensions[i]]): (node.obj[dimensions[i]]);
+        }
+        linearDistance = metric(linearPoint, node.obj);
+        if (node.right == null && node.left == null) {
+          if (bestNodes.size() < maxNodes || 
+              ownDistance < bestNodes.peek()[1]) {
+            saveNode(node, ownDistance);
+          }
+          return;
+        }
+        if (node.right == null || node.left==null) {
+          bestChild = (node.right == null)?(node.left):(node.right);
+        } else {
+          bestChild = (point[dimension] < node.obj[dimension]) 
+          ? (node.left) : (node.right);
+        }
+        nearestSearch(bestChild);        
+        if (bestNodes.size() < maxNodes || 
+            ownDistance < bestNodes.peek()[1]) {
+          saveNode(node, ownDistance);
+        }
+        if (bestNodes.size() < maxNodes || 
+            Math.abs(linearDistance) < bestNodes.peek()[1]) {
+          otherChild = (bestChild == node.left) ? 
+          (node.right): (node.left);
+          if (otherChild != null) { nearestSearch(otherChild); } }
+      }
+      if (maxDistance) {
+        for (i = 0; i < maxNodes; i += 1) {
+          bestNodes.push([null, maxDistance]);
+      } }
+      if (self.root) { nearestSearch(self.root); }
+      result = [];
+      for (i = 0; i < Math.min(maxNodes,bestNodes.content.length); 
+      i += 1) {
+        if (bestNodes.content[i][0]) {
+        result.push([bestNodes.content[i][0].obj, 
+                     bestNodes.content[i][1]]);
+      } }
+      return result;
+    };
+  }
+  function BinaryHeap(scoreFunction) {
+    this.content = [];
+    this.scoreFunction = scoreFunction;
+  }
+  BinaryHeap.prototype = {
+    push: function (element) {
+    /*Add the new element to the end of the array. Then, 
+      allow it to bubble up.*/
+      this.content.push(element);
+      this.bubbleUp(this.content.length - 1);
+    },
+    pop: function() {
+      /* Store the first element so we can return it later.
+    Get the element at the end of the array. If there are any      elements left, put the end element at the start, and let it sink down.*/
+      let result = this.content[0]; 
+      let end = this.content.pop();
+      if (this.content.length > 0) {
+        this.content[0] = end;
+        this.sinkDown(0);
+      }
+      return result;
+    },
+    peek: function () { return this.content[0]; },
+    size: function () { return this.content.length; },
+    bubbleUp: function (n) {
+      /* Fetch the element that has to be moved. When at 0, 
+      an element can not go up any further.*/
+      let element = this.content[n];
+      while (n > 0) {
+        /*Compute the parent element's index, and fetch it.*/
+        let parentN = Math.floor((n+1)/2)-1, 
+            parent = this.content[parentN];
+        /*Swap the elements if the parent is greater.*/
+      if (this.scoreFunction(element) < this.scoreFunction(parent)) {
+          this.content[parentN] = element;
+          this.content[n] = parent;
+          /*Update 'n' to continue at the new position.*/
+          n = parentN;
+        /*Found a parent that is less, no need to move it further.*/
+        } else { break; }
+      } },
+
+    sinkDown: function (n) {
+      /*Look up the target element and its score.*/
+        let length = this.content.length, element = this.content[n], elemScore = this.scoreFunction(element);
+
+      while (true) {
+        /*Compute the indices of the child elements. This is used 
+        to store the new position of the element, if any. Then, 
+        if the first child exists (is inside the array)...*/
+        let swap = null, child2N = (n+1)*2;
+        let child1N = child2N-1;
+        if (child1N < length) {
+          /* Look it up and compute its score.
+          If the score is less than our element's, we need to swap.*/
+          let child1 = this.content[child1N],
+            child1Score = this.scoreFunction(child1);
+          if (child1Score < elemScore)
+            swap = child1N;
+        }
+        /*Do the same checks for the other child.*/
+        if (child2N < length) {
+          let child2 = this.content[child2N],
+              child2Score = this.scoreFunction(child2);
+        if (child2Score < (swap == null ? elemScore : child1Score)) {
+            swap = child2N;
+          }
+        }
+        /*If the element needs to be moved, swap it, and continue.*/
+        if (swap != null) {
+          this.content[n] = this.content[swap];
+          this.content[swap] = element;
+          n = swap;
+         /*Otherwise, we are done.*/ 
+        } else { break; } } } };
+
+  let dims = [];
+  for (let i = 0; i < fpoint.length; i++) { dims.push(i); }
+  let tree = new kdTree(fpoints, (e1,e2) => {
+    let d = 0, e3 = e1;
+    if (!Array.isArray(e1)) {
+      e3 = [];
+      for (var key in e1) e3.push(e1[key]);
+      e1 = e3;
+    }
+    e1.forEach((e, i) => {
+      let sqd = (e1[i]-e2[i]);
+      d += sqd*sqd;
+    });
+    return d;
+  }, dims);
+  return tree.nearest(fpoint, 1, 1000)[0][0];
+}
+
+
+
+
+

@@ -1,0 +1,33 @@
+function permutationSort(arr) {
+  let pSort = (a) => {
+    let list = [];
+    permute(a,a.length,list);
+    for (let i = 0; i < list.length; i++) {
+      let x = list[i];
+      if (isSorted(x)) { return x; }
+    }
+    return a;
+  };
+  function permute(a, n, list) {
+    if (n == 1) {
+      let b = a.slice();
+      list.push(b);
+      return;
+    }
+    for (let i = 0; i < n; i++) {
+      swap(a,i,n-1);
+      permute(a,n-1,list);
+      swap(a,i,n-1);
+  }; };
+
+  let isSorted = (a) => {
+    for (let i = 1; i < a.length; i++){ 
+      if (a[i-1] > a[i]) { return false; }
+    } 
+   return true; 
+};
+  let swap = (arr, i, j) => {
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  };
+  return pSort(arr);
+}

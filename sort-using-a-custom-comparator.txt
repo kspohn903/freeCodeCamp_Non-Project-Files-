@@ -1,0 +1,6 @@
+let lengthSorter = (arr) => {
+  return arr.sort((a,b) => {
+    let result = b.length - a.length;
+    if (result == 0) { result = a.localeCompare(b); }
+    return result;
+}); };

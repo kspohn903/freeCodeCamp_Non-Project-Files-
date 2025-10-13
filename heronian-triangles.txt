@@ -1,0 +1,56 @@
+let heronianTriangle = (n) => {	
+    let list = [];
+    let j = 0;	
+    for(let c = 1; c <= 200; c++) {
+      for(let b = 1; b <= c; b++) {
+        for(let a = 1; a <= b; a++) {
+	        if(gcd(gcd(a,b),c) == 1 && isHeron(heronArea(a,b,c))) { 						   list.push({ "legs": [a,b,c], 
+                         "perimeter":(a+b+c),
+                         "area": heronArea(a,b,c) }); 
+           } /*end of if-block, array heronArea/ list.*/
+         } /*end of for-a-loop*/ 
+       } /*end of for-b-loop*/ 
+    } /*end of for-c-loop*/   
+    console.log(`Before Sort...\n`);
+    sort(list);
+    function heronArea (a,b,c) {
+	      let s = (a+b+c)/2;
+	      return Math.sqrt(s*(s-a)*(s- b)*(s-c));		
+    }	
+    function isHeron(h) { return h % 1 == 0 && h > 0; }
+    function gcd (a,b) {
+	    let leftover = 1,  dividend = a > b ? a : b, 
+                         divisor = a > b ? b : a;		
+	    while(leftover != 0){
+	         leftover = dividend % divisor;
+	         if(leftover > 0){
+		          dividend = divisor;
+		          divisor = leftover;
+	         } /* end of if-block */
+	    } /*end while loop*/	
+      return divisor;
+     }	  
+     function sort(list) {
+	      let swapped = true;
+	      while(swapped) {
+	           swapped = false;
+	           for(let i = 1; i < list.length; i++){
+		             if(list[i]["area"] < list[i-1]["area"] || 
+                    list[i]["area"] == list[i-1]["area"] && 
+                    list[i]["perimeter"] < list[i-1]["perimeter"]) {
+		                
+                    [list[i], list[i-1]] = [list[i-1],list[i]];
+		                swapped = true;
+		             } /*end if-block*/				 
+            } /*end for loop*/			
+        } /* end while loop */    
+    } /* end of sorted */ 
+  let legs = [];
+  for(let i =0; i < list.length; i++) {
+      legs.push(list[i]["legs"]);
+  }
+  console.log(`legs:\n${legs}\n`);
+  console.log(`I wanna slice legs:\n${legs.slice(0,n)}\n`);
+  return legs.slice(0,n);
+}
+console.log(`heronianTriangle: ${heronianTriangle(10)}`);

@@ -1,0 +1,13 @@
+let sedol = (input) => {
+  const weights = [1,3,1,7,3,9,1]; /*check input*/
+  if (input.length != 6 || ['A','E','I','O','U'].some(
+    vowel => input.includes(vowel)) ) {
+    return null;
+  } /*compute checksum*/
+  const checksum = input.split('').reduce((acc, char, i) => {
+      const charValue = (char >= '0' && char <= '9') ?
+      parseInt(char) : (char.charCodeAt(0)-'A'.charCodeAt(0) + 9);
+    return acc + charValue * weights[i];
+  }, 0);
+  return input + (10-checksum % 10);
+};

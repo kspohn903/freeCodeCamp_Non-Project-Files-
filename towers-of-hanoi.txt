@@ -1,0 +1,8 @@
+let towerOfHanoi = (n, a, b, c) => {
+ if(n==0){ return []; }
+  else if (n > 0) {
+return  [...towerOfHanoi(n - 1,a, c, b), 
+         [a,b], 
+         ...towerOfHanoi(n - 1, c, b, a)];
+   }
+};

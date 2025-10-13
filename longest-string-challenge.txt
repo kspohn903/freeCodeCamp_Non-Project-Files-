@@ -1,0 +1,5 @@
+function longestString(strings) {
+  const maxLen = strings.reduce(
+    (maxLen, str) => Math.max(maxLen,str.length), 0);
+  return strings.filter((str) => str.length == maxLen);
+}

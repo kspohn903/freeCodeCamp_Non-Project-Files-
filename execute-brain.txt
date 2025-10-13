@@ -1,0 +1,61 @@
+function brain(prog) {
+  /* bye, hello, and fib are global variables with strings holding programs. These are alternatives to the programs defined in the global scope ...found at https://www.iamcal.com/misc/bf_debug/ */
+  let command = (prog =="bye") ? "++++++++++[>+++++++>+++++++++++>++++++++++>++++++++++++>++++>+++>+++++++++>+<<<<<<<<-]>+.>+..>.--.>+.<+++.>>++++.>++.>---.<<<<<.+++.------.>-.>>>+.>>+++.---.":(prog == hello)? "++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.": (prog== "fib")? "+++++++++++>+>>>>++++++++++++++++++++++++++++++++++++++++++++>++++++++++++++++++++++++++++++++<<<<<<[>[>>>>>>+>+<<<<<<<-]>>>>>>>[<<<<<<<+>>>>>>>-]<[>++++++++++[-<-[>>+>+<<<-]>>>[<<<+>>>-]+<[>[-]<[-]]>[<<[>>>+<<<-]>>[-]]<<]>>>[>>+>+<<<-]>>>[<<<+>>>-]+<[>[-]<[-]]>[<<+>>[-]]<<<<<<<]>>>>>[++++++++++++++++++++++++++++++++++++++++++++++++.[-]]++++++++++<[->-<]>++++++++++++++++++++++++++++++++++++++++++++++++.[-]<<<<<<<<<<<<[>>>+>+<<<<-]>>>>[<<<<+>>>>-]<-[>>.>.<<<[-]]<<[>>+>+<<<-]>>>[<<<+>>>-]<<[<+>-]>[<+>-]<<<-]": (typeof(prog) == "string") ? prog: "Invalid program";
+  return (command != "Invalid program") ? brainRuntime(command): command;
+}
+
+function brainRuntime(program) {
+  let memory = Array(30000).fill(0), validCommands = 
+  [">", "<", "+", "-", ".", ",", "[", "]"],
+  commands = program.split('').filter(command => 
+  validCommands.indexOf(command) != -1), terminal = [], 
+  dataPointer = 0, commandPointer = 0;
+  while (commandPointer < commands.length) {
+    switch (commands[commandPointer]) {
+      case ">":
+        commandPointer++;
+        dataPointer++;
+        break;
+      case "<":
+        commandPointer++;
+        dataPointer--;
+        break;
+      case "+":
+        commandPointer++;
+        memory[dataPointer]++;
+        break;
+      case "-":
+        commandPointer++;
+        memory[dataPointer]--;
+        break;
+      case ".":
+        commandPointer++;
+        terminal.push(String.fromCharCode(memory[dataPointer]));
+        break;
+      case ",":
+        console.log("Not Implemented");
+        break;
+      case "[":
+        if (memory[dataPointer] == 0) {
+          let open = 1;
+          while (open !== 0) {
+            commandPointer++;
+            if (commands[commandPointer] == "[") { open++; }
+            else if (commands[commandPointer] == "]") { open--; }
+          }
+        } else {
+          commandPointer++;
+        }
+        break;
+      case "]":
+        if (memory[dataPointer] != 0) {
+          let open = 1;
+          while (open != 0) {
+            commandPointer--;
+            if (commands[commandPointer] == "[") { open--; }
+            else if (commands[commandPointer] == "]") { open++; }
+        } } else {
+          commandPointer++;
+        }
+        break;
+  } } return terminal.join(""); }

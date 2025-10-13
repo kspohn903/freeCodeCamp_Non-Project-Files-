@@ -1,0 +1,10 @@
+let crossProduct = (a, b) => {
+ if(a == undefined || a == null || 
+    b == undefined || b == null) {
+      return null;
+} /*null/undefined paramslistcheck*/
+ return [(a[1]*b[2]-a[2]*b[1]), (-1*a[0]*b[2]+ a[2]*b[0]), 
+         (a[0]*b[1]-a[1]*b[0]) ]; 
+/*Assume 3D vectors, a and b. Traditionally cross-product of vectors is (a x b) = x-hat(ay*bz-az*by)+ y-hat(-1*ax*bz + az*bx) + z-hat(ax*by -ay*bx). 
+   I'm hard coding the mathematical, assumption-based formula.*/ 
+}

@@ -1,0 +1,42 @@
+let testText = [ 
+    "Given$a$text$file$of$many$lines,$where$fields$within$a$line$",
+    "are$delineated$by$a$single$'dollar'$character,$write$a$program",
+ "that$aligns$each$column$of$fields$by$ensuring$that$words$in$each$",
+ "column$are$separated$by$at$least$one$space.",
+ "Further,$allow$for$each$word$in$a$column$to$be$either$left$",
+ "justified,$right$justified,$or$center$justified$within$its$column."
+                ];
+ let x,y, max, cols=0, diff, l,r;
+ 
+String.prototype.repeat= function(n) {
+       return new Array(1 + parseInt(n)).join(this);
+};
+let formatText = (input, justification = 'center') => {
+for(x=0;x<input.length;x++) {
+ input[x]=input[x].split("$");
+ if(input[x].length>cols) { cols=input[x].length; }
+}
+for(x=0;x<cols;x++) {
+ max=0;
+ for(y=0;y<input.length;y++) {
+  if(input[y][x]&&max<input[y][x].length){ max=input[y][x].length; } 
+ } 
+ for(y=0;y<input.length;y++) {
+   if(input[y][x]) {
+   diff=(max-input[y][x].length)/2;
+   l = " ".repeat(Math.floor(diff));
+   r = " ".repeat(Math.ceil(diff));
+   if(justification=="left") { r += l; l = ""; }
+   if(justification=="right") { l += r; r = ""; }
+   input[y][x]=l+input[y][x]+r;
+   } 
+ }
+}
+for(x=0;x<input.length;x++) { input[x]=input[x].join(" "); }
+input = input.join("\n");
+// console.log(input);
+return input;
+};
+console.log(`Case 1:\n${formatText(testText, 'right')}\n`);
+console.log(`Case 2:\n${formatText(testText, 'left')}\n`);
+console.log(`Case 3:\n${formatText(testText, 'center')}\n`);

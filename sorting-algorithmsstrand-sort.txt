@@ -1,0 +1,26 @@
+function strandSort(list) {
+  let merge = (left, right) => {
+    let result = [];
+    while (left.length != 0 && right.length != 0) {
+  result.push((left[0] <= right[0]) ? left.shift(): right.shift()); 
+    }
+    result.push.apply(result, left);
+    result.push.apply(result, right);
+    return result;
+  };
+  if (list.length <= 1) { return list; }
+  let result = [];
+  while (list.length > 0) {
+    let sorted = [];
+    sorted.push(list.shift());
+    let len = list.length;
+    for (let i = 1; i < len; i++) {
+      let elem = list[i];
+      if (sorted[i-1] <= elem) {
+        sorted.push(elem);
+        sorted.splice(i, 1);
+    } }
+    result = merge(result, sorted);
+  }
+  return result;
+}

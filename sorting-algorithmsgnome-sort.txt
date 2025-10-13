@@ -1,0 +1,10 @@
+function gnomeSort(a) {
+  let moveBack = (i) => {
+    for (; i > 0 && a[i-1] > a[i]; i--) {
+      [a[i], a[i-1]] = [a[i-1],a[i]];
+    } };
+  for (let i = 1; i < a.length; i++) {
+    if (a[i-1] > a[i]) { moveBack(i); }
+  }
+  return a;
+}

@@ -1,0 +1,11 @@
+let isKaprekar = (n, base) => {
+  let kap = false;
+  if (n < 1) { return kap; }
+  if (n == 1) { return !kap; }
+  for (let a = n*n, b = 0, s = 1; a; s *= base) {
+    console.log(`BEFORE: (a:${a},b:${b})\n`);
+    b += (a%base)*s;
+    a = Math.floor(a/base);
+    console.log(`AFTER: (a:${a},b:${b})\n`);
+    if (b && (a+b) == n) { return !kap; }
+  } return kap; }; 
